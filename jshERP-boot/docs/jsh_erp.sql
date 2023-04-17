@@ -1002,3 +1002,58 @@ INSERT INTO `jsh_user_business` VALUES ('57', 'UserCustomer', '121', '[56]', nul
 INSERT INTO `jsh_user_business` VALUES ('67', 'UserRole', '131', '[17]', null, '63', '0');
 INSERT INTO `jsh_user_business` VALUES ('68', 'RoleFunctions', '16', '[210]', null, '63', '0');
 INSERT INTO `jsh_user_business` VALUES ('69', 'RoleFunctions', '17', '[210][211][241][33][199][242][41][200][201][202][40][232][233][197][203][204][205][206][212]', '[{\"funId\":\"241\",\"btnStr\":\"1,2\"},{\"funId\":\"33\",\"btnStr\":\"1,2\"},{\"funId\":\"199\",\"btnStr\":\"1,2\"},{\"funId\":\"242\",\"btnStr\":\"1,2\"},{\"funId\":\"41\",\"btnStr\":\"1,2\"},{\"funId\":\"200\",\"btnStr\":\"1,2\"},{\"funId\":\"210\",\"btnStr\":\"1,2\"},{\"funId\":\"211\",\"btnStr\":\"1,2\"},{\"funId\":\"197\",\"btnStr\":\"1\"},{\"funId\":\"203\",\"btnStr\":\"1\"},{\"funId\":\"204\",\"btnStr\":\"1\"},{\"funId\":\"205\",\"btnStr\":\"1\"},{\"funId\":\"206\",\"btnStr\":\"1\"},{\"funId\":\"212\",\"btnStr\":\"1\"},{\"funId\":\"201\",\"btnStr\":\"1,2\"},{\"funId\":\"202\",\"btnStr\":\"1,2\"},{\"funId\":\"40\",\"btnStr\":\"1,2\"},{\"funId\":\"232\",\"btnStr\":\"1,2\"},{\"funId\":\"233\",\"btnStr\":\"1,2\"}]', '63', '0');
+
+/**
+  库存表
+ */
+CREATE TABLE `my_stock` (
+`id` bigint(20) NOT NULL AUTO_INCREMENT,
+`product_type` char(25) DEFAULT NULL COMMENT '产品类型(编号)',
+`product_name` char(50) DEFAULT NULL COMMENT '产品名称',
+`product_weight` double DEFAULT NULL COMMENT '产品重量',
+`is_other` tinyint(4) DEFAULT NULL COMMENT '是否其他渠道入库',
+`description` varchar(255) DEFAULT '' COMMENT '描述信息',
+`modify_name` varchar(255) DEFAULT NULL COMMENT '修改人名称',
+`modify_time` datetime DEFAULT NULL COMMENT '修改时间',
+`create_name` varchar(255) DEFAULT NULL COMMENT '创建人名称',
+`create_time` datetime DEFAULT NULL COMMENT '创建时间',
+PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+/**
+  入库表
+ */
+CREATE TABLE `my_stock_in` (
+`id` bigint(20) NOT NULL AUTO_INCREMENT,
+`product_type` char(25) DEFAULT NULL COMMENT '产品类型(编号)',
+`product_name` char(50) DEFAULT NULL COMMENT '产品名称',
+`product_amount` int(11) DEFAULT NULL COMMENT '产品件数',
+`product_weight` double DEFAULT NULL COMMENT '产品重量',
+`is_other` tinyint(4) DEFAULT NULL COMMENT '是否其他渠道入库',
+`description` varchar(255) DEFAULT '' COMMENT '描述信息',
+`customer` varchar(255) DEFAULT NULL COMMENT '客户名称',
+`modify_name` varchar(255) DEFAULT NULL COMMENT '修改人名称',
+`modify_time` datetime DEFAULT NULL COMMENT '修改时间',
+`create_name` varchar(255) DEFAULT NULL COMMENT '创建人名称',
+`create_time` datetime DEFAULT NULL COMMENT '创建时间',
+PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+/**
+  出库表
+ */
+CREATE TABLE `my_stock_out` (
+`id` bigint(20) NOT NULL AUTO_INCREMENT,
+`product_type` char(25) DEFAULT NULL COMMENT '产品类型(编号)',
+`product_name` char(50) DEFAULT NULL COMMENT '产品名称',
+`product_amount` int(11) DEFAULT NULL COMMENT '产品件数',
+`product_weight` double DEFAULT NULL COMMENT '产品重量',
+`is_other` tinyint(4) DEFAULT NULL COMMENT '是否其他渠道入库',
+`description` varchar(255) DEFAULT '' COMMENT '描述信息',
+`customer` varchar(255) DEFAULT NULL COMMENT '客户名称',
+`modify_name` varchar(255) DEFAULT NULL COMMENT '修改人名称',
+`modify_time` datetime DEFAULT NULL COMMENT '修改时间',
+`create_name` varchar(255) DEFAULT NULL COMMENT '创建人名称',
+`create_time` datetime DEFAULT NULL COMMENT '创建时间',
+PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
