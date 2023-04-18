@@ -1,6 +1,7 @@
 package com.jsh.erp.controller;
 
 import com.jsh.erp.datasource.common.ResponseBean;
+import com.jsh.erp.datasource.entities.StockIn;
 import com.jsh.erp.datasource.vo.StockInTotal;
 import com.jsh.erp.datasource.vo.StockInVo;
 import com.jsh.erp.service.stockIn.StockInService;
@@ -13,7 +14,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 import static com.jsh.erp.constants.BusinessConstants.STOCK_IN_STATUS;
-import static com.jsh.erp.constants.BusinessConstants.STOCK_STATUS;
 
 @RestController
 @RequestMapping(value = "/stockin")
@@ -25,25 +25,26 @@ public class StockInController {
     private StockInService stockInService;
 
     /**
-     * 查询入库信息
+     * 查询入库列表和详情
      *
      * @return
      */
     @GetMapping(value = "/select/stockin")
     @ApiOperation(value = "查询入库信息")
-    public ResponseBean<List<StockInTotal>> selectStockIn() {
-        return ResponseBean.ok(stockInService.selectByStatus(STOCK_STATUS));
+    public ResponseBean<List<StockIn>> selectStockIn(StockInVo stockInVo) {
+        return ResponseBean.ok(stockInService.select(stockInVo));
     }
 
     /**
-     * 查询入库信息
+     * 查询库存列表和详情
      *
      * @return
      */
     @GetMapping(value = "/select/stock")
     @ApiOperation(value = "查询库存信息")
-    public ResponseBean<List<StockInTotal>> selectStock() {
-        return ResponseBean.ok(stockInService.selectByStatus(STOCK_IN_STATUS));
+    public ResponseBean<List<StockInTotal>> selectStock(StockInVo stockInVo) {
+        stockInVo.setStatus(STOCK_IN_STATUS);
+        return ResponseBean.ok(stockInService.selectAndStatistics(stockInVo));
     }
 
     /**

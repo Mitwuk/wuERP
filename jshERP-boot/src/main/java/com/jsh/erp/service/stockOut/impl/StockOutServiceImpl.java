@@ -51,4 +51,19 @@ public class StockOutServiceImpl extends ServiceImpl<StockOutMapper, StockOut> i
         LambdaQueryWrapper<StockOut> wrapper = new LambdaQueryWrapper<StockOut>().eq(StockOut::getStockInOrderId, stockInOrderId);
         return stockOutMapper.selectOne(wrapper);
     }
+
+    @Override
+    public List<StockOutVo> selectByOrderId(List<StockIn> stockIns) {
+        List<StockOutVo> stockOutVoList = new ArrayList<>();
+        for (StockIn stockIn : stockIns) {
+            StockOutVo stockOutVo = new StockOutVo();
+            BeanUtils.copyProperties(stockIn, stockOutVo);
+            StockOut stockOut = select(stockIn.getOrderId());
+            BeanUtils.copyProperties(stockOut, stockOutVo);
+            stockOutVoList.add(stockOutVo);
+        }
+        return stockOutVoList;
+    }
+
+
 }

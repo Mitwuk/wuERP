@@ -9,5 +9,5 @@ public interface StockOutBillService {
 
     int add(StockOutBillVo stockOutBillVo);
 
-    int delete(long id);
+    boolean delete(long id);
 }

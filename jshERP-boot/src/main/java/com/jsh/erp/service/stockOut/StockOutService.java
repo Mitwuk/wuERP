@@ -1,5 +1,6 @@
 package com.jsh.erp.service.stockOut;
 
+import com.jsh.erp.datasource.entities.StockIn;
 import com.jsh.erp.datasource.entities.StockOut;
 import com.jsh.erp.datasource.vo.StockOutVo;
 
@@ -19,4 +20,6 @@ public interface StockOutService {
      * @return
      */
     StockOut select(String stockInOrderId);
+
+    List<StockOutVo> selectByOrderId(List<StockIn> stockIns);
 }

@@ -10,5 +10,5 @@ public interface StockInBillService {
 
     int add(StockInBillVo stockInBillVo);
 
-    int delete(Long id);
+    boolean delete(long id);
 }

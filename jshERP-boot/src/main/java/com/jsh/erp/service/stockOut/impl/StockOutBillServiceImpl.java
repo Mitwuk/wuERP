@@ -5,14 +5,17 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.jsh.erp.constants.ExceptionConstants;
+import com.jsh.erp.datasource.entities.StockOut;
 import com.jsh.erp.datasource.entities.StockOutBill;
 import com.jsh.erp.datasource.mappers.StockOutBillMapper;
+import com.jsh.erp.datasource.mappers.StockOutMapper;
 import com.jsh.erp.datasource.vo.StockOutBillVo;
 import com.jsh.erp.exception.BusinessRunTimeException;
 import com.jsh.erp.service.stockOut.StockOutBillService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import java.time.LocalDateTime;
@@ -22,6 +25,8 @@ public class StockOutBillServiceImpl extends ServiceImpl<StockOutBillMapper, Sto
 
     @Autowired
     private StockOutBillMapper stockOutBillMapper;
+    @Autowired
+    private StockOutMapper stockOutMapper;
 
     @Override
     public IPage<StockOutBill> selectByPage(StockOutBillVo stockOutBillVo) {
@@ -44,7 +49,12 @@ public class StockOutBillServiceImpl extends ServiceImpl<StockOutBillMapper, Sto
     }
 
     @Override
-    public int delete(long id) {
-        return stockOutBillMapper.deleteById(id);
+    @Transactional(value = "transactionManager", rollbackFor = Exception.class)
+    public boolean delete(long id) {
+        QueryWrapper<StockOut> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("bill_id", id);
+        // 删除该出库单对应的
+        stockOutMapper.delete(queryWrapper);
+        return stockOutBillMapper.deleteById(id) > 0;
     }
 }

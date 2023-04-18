@@ -16,11 +16,18 @@ public interface StockInService {
     boolean upload(List<StockInVo> stockInList);
 
     /**
-     * 根据条件查询
-     * @param status
+     * 根据条件查询（统计）
+     * @param stockInVo
      * @return
      */
-    List<StockInTotal> selectByStatus(int status);
+    List<StockInTotal> selectAndStatistics(StockInVo stockInVo);
+
+    /**
+     * 根据条件查询
+     * @param stockInVo
+     * @return
+     */
+    List<StockIn> select(StockInVo stockInVo);
 
     /**
      * 更新状态

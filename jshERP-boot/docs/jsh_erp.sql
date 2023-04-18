@@ -1007,22 +1007,21 @@ INSERT INTO `jsh_user_business` VALUES ('69', 'RoleFunctions', '17', '[210][211]
   入库表
  */
 CREATE TABLE `my_stock_in` (
-    `id` bigint(20) NOT NULL AUTO_INCREMENT,
-    `bill_id` bigint(20) DEFAULT NULL COMMENT '账单ID',
-    `order_id` varchar(255) DEFAULT NULL COMMENT '流水号',
-    `product_type` varchar(255) DEFAULT NULL COMMENT '产品类型(编号)',
-    `product_name` varchar(255) DEFAULT NULL COMMENT '产品名称',
-    `product_count` int(11) DEFAULT NULL COMMENT '产品只数',
-    `product_weight` double DEFAULT NULL COMMENT '产品重量',
-    `is_other` tinyint(4) DEFAULT NULL COMMENT '是否其他渠道入库',
-    `description` varchar(255) DEFAULT '' COMMENT '描述信息',
-    `supplier` varchar(255) DEFAULT NULL COMMENT '供应商',
-    `status` tinyint(4) DEFAULT NULL COMMENT '状态：1是库存；0是出库',
-    `modify_name` varchar(255) DEFAULT NULL COMMENT '修改人名称',
-    `modify_time` datetime DEFAULT NULL COMMENT '修改时间',
-    `create_name` varchar(255) DEFAULT NULL COMMENT '创建人名称',
-    `create_time` datetime DEFAULT NULL COMMENT '创建时间',
-    PRIMARY KEY (`id`)
+   `id` bigint(20) NOT NULL AUTO_INCREMENT,
+   `bill_id` bigint(20) DEFAULT NULL COMMENT '账单ID',
+   `order_id` varchar(255) DEFAULT NULL COMMENT '流水号',
+   `product_type` varchar(255) DEFAULT NULL COMMENT '产品类型(编号)',
+   `product_name` varchar(255) DEFAULT NULL COMMENT '产品名称',
+   `product_count` int(11) DEFAULT NULL COMMENT '产品只数',
+   `product_weight` double DEFAULT NULL COMMENT '产品重量',
+   `description` varchar(255) DEFAULT '' COMMENT '描述信息',
+   `supplier` varchar(255) DEFAULT NULL COMMENT '供应商',
+   `status` tinyint(4) DEFAULT NULL COMMENT '状态：1是库存；0是出库',
+   `modify_name` varchar(255) DEFAULT NULL COMMENT '修改人名称',
+   `modify_time` datetime DEFAULT NULL COMMENT '修改时间',
+   `create_name` varchar(255) DEFAULT NULL COMMENT '创建人名称',
+   `create_time` timestamp NULL DEFAULT NULL COMMENT '创建时间',
+   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 

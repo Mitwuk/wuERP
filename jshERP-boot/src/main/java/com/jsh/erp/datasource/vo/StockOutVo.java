@@ -7,16 +7,18 @@ import java.time.LocalDateTime;
 @Data
 public class StockOutVo {
     private long id;
-    private String billId;
+    private long billId;
     private String orderId;
+    private String productType;
+    private String productName;
+    private int productCount;
+    private double productWeight;
     /**
      * 入库流水号
      */
     private String stockInOrderId;
     private String customer;
     private String description;
-    private LocalDateTime startModifyTime;
-    private LocalDateTime endModifyTime;
-    private LocalDateTime startCreateTime;
-    private LocalDateTime endCreateTime;
+    private LocalDateTime modifyTime;
+    private LocalDateTime createTime;
 }

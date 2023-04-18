@@ -15,7 +15,6 @@ public class StockIn {
     private String productName;
     private int productCount;
     private double productWeight;
-    private int isOther;
     private String description;
     private String supplier;
     private int status;

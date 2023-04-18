@@ -1,5 +1,6 @@
 package com.jsh.erp.service.stockIn.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.jsh.erp.constants.BusinessConstants;
@@ -37,13 +38,53 @@ public class StockInServiceImpl extends ServiceImpl<StockInMapper, StockIn> impl
     }
 
     @Override
-    public List<StockInTotal> selectByStatus(int status) {
-        List<StockInTotal> stockInTotalList = new ArrayList<>();
-        Map<String, Object> columnMap = new HashMap<>();
-        if (status >= 0) {
-            columnMap.put("status", status);
+    public List<StockInTotal> selectAndStatistics(StockInVo stockInVo) {
+        List<StockIn> stockIns = select(stockInVo);
+        return statistics(stockIns);
+    }
+
+    @Override
+    public List<StockIn> select(StockInVo stockInVo) {
+        QueryWrapper<StockIn> queryWrapper = new QueryWrapper<>();
+        if (!Objects.isNull(stockInVo.getStatus()) && stockInVo.getStatus() >= 0) {
+            queryWrapper.eq("status", stockInVo.getStatus());
         }
-        List<StockIn> stockIns = stockInMapper.selectByMap(columnMap);
+        if (!Objects.isNull(stockInVo.getBillId())) {
+            queryWrapper.eq("bill_id", stockInVo.getBillId());
+        }
+        if (!Objects.isNull(stockInVo.getSupplier())) {
+            queryWrapper.eq("supplier", stockInVo.getSupplier());
+        }
+        if (!Objects.isNull(stockInVo.getProductType())) {
+            queryWrapper.eq("product_type", stockInVo.getProductType());
+        }
+        if (!Objects.isNull(stockInVo.getProductName())) {
+            queryWrapper.eq("product_name", stockInVo.getProductName());
+        }
+        if (!Objects.isNull(stockInVo.getCreateTime())) {
+            String startString = stockInVo.getCreateTime() + " 00:00:00";
+            String endString = stockInVo.getCreateTime() + " 23:59:59";
+            queryWrapper.between("create_time", startString, endString);
+        }
+        queryWrapper.orderByDesc("create_time");
+        return stockInMapper.selectList(queryWrapper);
+    }
+
+    @Override
+    public int updateStatus(String orderId, int status) {
+        return stockInMapper.update(null, new LambdaUpdateWrapper<StockIn>()
+                .eq(StockIn::getOrderId, orderId)
+                .set(StockIn::getStatus, status));
+    }
+
+    /**
+     * 统计
+     *
+     * @param stockIns
+     * @return
+     */
+    public List<StockInTotal> statistics(List<StockIn> stockIns) {
+        List<StockInTotal> stockInTotalList = new ArrayList<>();
         Map<String, List<StockIn>> stringListMap = stockIns.stream().collect(Collectors.groupingBy(StockIn::getProductType));
         for (Map.Entry<String, List<StockIn>> map : stringListMap.entrySet()) {
             StockInTotal stockInTotal = new StockInTotal();
@@ -65,13 +106,6 @@ public class StockInServiceImpl extends ServiceImpl<StockInMapper, StockIn> impl
         return stockInTotalList;
     }
 
-    @Override
-    public int updateStatus(String orderId, int status) {
-        return stockInMapper.update(null, new LambdaUpdateWrapper<StockIn>()
-                .eq(StockIn::getOrderId, orderId)
-                .set(StockIn::getStatus, status));
-    }
-
     /**
      * 计算两个日期时间的相差天数与小时
      *
@@ -79,26 +113,8 @@ public class StockInServiceImpl extends ServiceImpl<StockInMapper, StockIn> impl
      * @param endTime   结束时间
      * @return String
      */
-    public String calcLocalDateTime(LocalDateTime startTime, LocalDateTime endTime) {
+    public long calcLocalDateTime(LocalDateTime startTime, LocalDateTime endTime) {
         Duration between = Duration.between(startTime, endTime);
-        StringBuilder timeBuilder = new StringBuilder();
-
-        long dayResult = between.toDays();
-        if (dayResult > 0) {
-            long betweenHours = between.toHours();
-            long hourResult = dayResult * 24 - betweenHours;
-            if (hourResult > 0) {
-                timeBuilder.append(dayResult).append("天")
-                        .append(" ").append(hourResult).append("小时");
-            } else if (hourResult == 0) {
-                timeBuilder.append(dayResult).append("天");
-            } else {
-                timeBuilder.append(dayResult).append("天")
-                        .append(" ").append(-hourResult).append("小时");
-            }
-        } else {
-            timeBuilder.append(between.toHours()).append("小时");
-        }
-        return timeBuilder.toString();
+        return between.toHours();
     }
 }

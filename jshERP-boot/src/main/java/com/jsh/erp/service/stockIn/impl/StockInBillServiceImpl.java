@@ -5,8 +5,10 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.jsh.erp.constants.ExceptionConstants;
+import com.jsh.erp.datasource.entities.StockIn;
 import com.jsh.erp.datasource.entities.StockInBill;
 import com.jsh.erp.datasource.mappers.StockInBillMapper;
+import com.jsh.erp.datasource.mappers.StockInMapper;
 import com.jsh.erp.datasource.vo.StockInBillVo;
 import com.jsh.erp.exception.BusinessRunTimeException;
 import com.jsh.erp.service.stockIn.StockInBillService;
@@ -22,6 +24,8 @@ public class StockInBillServiceImpl extends ServiceImpl<StockInBillMapper, Stock
 
     @Autowired
     private StockInBillMapper stockInBillMapper;
+    @Autowired
+    private StockInMapper stockInMapper;
 
     @Override
     public IPage<StockInBill> selectByPage(StockInBillVo stockInBillVo) {
@@ -44,7 +48,11 @@ public class StockInBillServiceImpl extends ServiceImpl<StockInBillMapper, Stock
     }
 
     @Override
-    public int delete(Long id) {
-        return stockInBillMapper.deleteById(id);
+    public boolean delete(long id) {
+        QueryWrapper<StockIn> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("bill_id", id);
+        // 根据billId删除入库表
+        stockInMapper.delete(queryWrapper);
+        return stockInBillMapper.deleteById(id) > 0;
     }
 }

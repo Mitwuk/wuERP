@@ -1,8 +1,10 @@
 package com.jsh.erp.controller;
 
 import com.jsh.erp.datasource.common.ResponseBean;
+import com.jsh.erp.datasource.entities.StockIn;
 import com.jsh.erp.datasource.entities.StockOut;
 import com.jsh.erp.datasource.vo.StockInTotal;
+import com.jsh.erp.datasource.vo.StockInVo;
 import com.jsh.erp.datasource.vo.StockOutVo;
 import com.jsh.erp.service.stockIn.StockInService;
 import com.jsh.erp.service.stockOut.StockOutService;
@@ -30,14 +32,16 @@ public class StockOutController {
     private StockInService stockInService;
 
     /**
-     * 查询出库信息
+     * 查询出库列表和详情
      *
      * @return
      */
     @GetMapping(value = "/select")
     @ApiOperation(value = "查询出库信息")
-    public ResponseBean<List<StockInTotal>> select() {
-        return ResponseBean.ok(stockInService.selectByStatus(STOCK_OUT_STATUS));
+    public ResponseBean<List<StockOutVo>> select(StockInVo stockInVo) {
+        stockInVo.setStatus(STOCK_OUT_STATUS);
+        List<StockIn> stockInList = stockInService.select(stockInVo);
+        return ResponseBean.ok(stockOutService.selectByOrderId(stockInList));
     }
 
     /**

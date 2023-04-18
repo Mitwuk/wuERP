@@ -43,7 +43,7 @@ public class StockOutBillController {
     @DeleteMapping(value = "/delete")
     @ApiOperation(value = "删除出库单")
     public ResponseBean<Object> delete(long id) {
-        if (BooleanUtils.toBoolean(stockOutBillService.delete(id))) {
+        if (stockOutBillService.delete(id)) {
             return new ResponseBean<Object>(SERVICE_SUCCESS_CODE, SERVICE_SUCCESS_MSG);
         }
         return new ResponseBean<Object>(USER_DELETE_FAILED_CODE, "删除失败");
