@@ -13,8 +13,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-import static com.jsh.erp.constants.BusinessConstants.STOCK_IN_STATUS;
-
 @RestController
 @RequestMapping(value = "/stockin")
 @Slf4j
@@ -36,14 +34,13 @@ public class StockInController {
     }
 
     /**
-     * 查询库存列表和详情
+     * 统计和详情（库存：1，出库：0，入库：-1）
      *
      * @return
      */
-    @GetMapping(value = "/select/stock")
+    @GetMapping(value = "/statistics/stock")
     @ApiOperation(value = "查询库存信息")
-    public ResponseBean<List<StockInTotal>> selectStock(StockInVo stockInVo) {
-        stockInVo.setStatus(STOCK_IN_STATUS);
+    public ResponseBean<List<StockInTotal>> statisticsStock(StockInVo stockInVo) {
         return ResponseBean.ok(stockInService.selectAndStatistics(stockInVo));
     }
 
