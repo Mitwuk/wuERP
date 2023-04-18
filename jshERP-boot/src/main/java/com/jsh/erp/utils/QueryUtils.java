@@ -3,8 +3,10 @@ package com.jsh.erp.utils;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import org.springframework.util.Assert;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -138,5 +140,19 @@ public class QueryUtils {
         } else {
             return null;
         }
+    }
+
+    public static Map<String, Object> getDataTable(IPage<?> pageInfo) {
+        Map<String, Object> data = new HashMap<>(5);
+        data.put(Constants.ROWS, pageInfo.getRecords());
+        data.put(Constants.TOTAL, pageInfo.getTotal());
+        data.put(Constants.PAGE_SIZE, pageInfo.getSize());
+        data.put(Constants.CURRENT_PAGE, pageInfo.getCurrent());
+        long totalPage = pageInfo.getTotal()/pageInfo.getSize();
+        if (pageInfo.getTotal()%pageInfo.getSize() > 0) {
+            totalPage += 1;
+        }
+        data.put(Constants.TOTAL_PAGE, totalPage);
+        return data;
     }
 }

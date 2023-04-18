@@ -1,16 +1,21 @@
 package com.jsh.erp.controller;
 
+import com.jsh.erp.datasource.common.ResponseBean;
+import com.jsh.erp.datasource.entities.StockOut;
+import com.jsh.erp.datasource.vo.StockInTotal;
 import com.jsh.erp.datasource.vo.StockOutVo;
+import com.jsh.erp.service.stockIn.StockInService;
 import com.jsh.erp.service.stockOut.StockOutService;
-import com.jsh.erp.utils.BaseResponseInfo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletResponse;
+import java.util.List;
+
+import static com.jsh.erp.constants.BusinessConstants.STOCK_OUT_STATUS;
 
 @RestController
 @RequestMapping(value = "/stockout")
@@ -21,42 +26,53 @@ public class StockOutController {
     @Autowired
     private StockOutService stockOutService;
 
+    @Autowired
+    private StockInService stockInService;
+
     /**
      * 查询出库信息
-     * @param stockOutVo
+     *
      * @return
      */
     @GetMapping(value = "/select")
     @ApiOperation(value = "查询出库信息")
-    public BaseResponseInfo selectStockOut(StockOutVo stockOutVo) {
-        BaseResponseInfo res = new BaseResponseInfo();
-        return res;
+    public ResponseBean<List<StockInTotal>> select() {
+        return ResponseBean.ok(stockInService.selectByStatus(STOCK_OUT_STATUS));
     }
 
     /**
-     * 创建出库单
-     * @param stockOutVo
+     * 查询出库信息
+     *
      * @return
      */
-    @PostMapping(value = "/create")
-    @ApiOperation(value = "创建出库单")
-    public BaseResponseInfo createStockOut(StockOutVo stockOutVo) {
-        BaseResponseInfo res = new BaseResponseInfo();
-        stockOutService.create(stockOutVo);
-        return res;
+    @GetMapping(value = "/detail")
+    @ApiOperation(value = "查询出库详情")
+    public ResponseBean<StockOut> detail(String stockInOrderId) {
+        return ResponseBean.ok(stockOutService.select(stockInOrderId));
     }
 
     /**
      * 上传出库信息
-     * @param stockOutVo
+     *
+     * @param stockOutVoList
      * @return
      */
-    @PostMapping(value = "/upload")
+    @PostMapping(value = "/add")
     @ApiOperation(value = "上传出库信息")
-    public BaseResponseInfo uploadStockOut(StockOutVo stockOutVo) {
-        BaseResponseInfo res = new BaseResponseInfo();
-        stockOutService.upload(stockOutVo);
-        return res;
+    public ResponseBean<Boolean> add(@RequestBody List<StockOutVo> stockOutVoList) {
+        return ResponseBean.ok(stockOutService.add(stockOutVoList));
+    }
+
+    /**
+     * 导出出库信息
+     *
+     * @param stockOutVo
+     * @param response
+     */
+    @PostMapping(value = "/export")
+    @ApiOperation(value = "导出出库信息")
+    public void exportStockOut(StockOutVo stockOutVo, HttpServletResponse response) {
+        // TODO
     }
 
 }

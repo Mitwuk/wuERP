@@ -1,16 +1,19 @@
 package com.jsh.erp.controller;
 
+import com.jsh.erp.datasource.common.ResponseBean;
+import com.jsh.erp.datasource.vo.StockInTotal;
 import com.jsh.erp.datasource.vo.StockInVo;
 import com.jsh.erp.service.stockIn.StockInService;
-import com.jsh.erp.utils.BaseResponseInfo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+import static com.jsh.erp.constants.BusinessConstants.STOCK_IN_STATUS;
+import static com.jsh.erp.constants.BusinessConstants.STOCK_STATUS;
 
 @RestController
 @RequestMapping(value = "/stockin")
@@ -24,42 +27,34 @@ public class StockInController {
     /**
      * 查询入库信息
      *
-     * @param stockInVo
      * @return
      */
-    @GetMapping(value = "/select")
+    @GetMapping(value = "/select/stockin")
     @ApiOperation(value = "查询入库信息")
-    public BaseResponseInfo selectStockIn(StockInVo stockInVo) {
-        BaseResponseInfo res = new BaseResponseInfo();
-        return res;
+    public ResponseBean<List<StockInTotal>> selectStockIn() {
+        return ResponseBean.ok(stockInService.selectByStatus(STOCK_STATUS));
     }
 
     /**
-     * 创建入库单
+     * 查询入库信息
      *
-     * @param stockInVo
      * @return
      */
-    @PostMapping(value = "/create")
-    @ApiOperation(value = "创建入库单")
-    public BaseResponseInfo createStockIn(StockInVo stockInVo) {
-        BaseResponseInfo res = new BaseResponseInfo();
-        stockInService.create(stockInVo);
-        return res;
+    @GetMapping(value = "/select/stock")
+    @ApiOperation(value = "查询库存信息")
+    public ResponseBean<List<StockInTotal>> selectStock() {
+        return ResponseBean.ok(stockInService.selectByStatus(STOCK_IN_STATUS));
     }
 
     /**
      * 上传入库信息
      *
-     * @param stockInVo
+     * @param stockInList
      * @return
      */
-    @PostMapping(value = "/upload")
-    @ApiOperation(value = "上传入库信息")
-    public BaseResponseInfo uploadStockIn(StockInVo stockInVo) {
-        BaseResponseInfo res = new BaseResponseInfo();
-        stockInService.upload(stockInVo);
-        return res;
+    @PostMapping(value = "/add")
+    @ApiOperation(value = "添加入库信息")
+    public ResponseBean<Boolean> add(@RequestBody List<StockInVo> stockInList) {
+        return ResponseBean.ok(stockInService.upload(stockInList));
     }
-
 }

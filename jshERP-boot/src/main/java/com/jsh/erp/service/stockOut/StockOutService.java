@@ -8,22 +8,15 @@ import java.util.List;
 public interface StockOutService {
     /**
      * 创建出库单
-     * @param stockOutVo
+     * @param stockOutVoList
      * @return
      */
-    int create(StockOutVo stockOutVo);
-
-    /**
-     * 上传出库信息
-     * @param stockOutVo
-     * @return
-     */
-    int upload(StockOutVo stockOutVo);
+    boolean add(List<StockOutVo> stockOutVoList);
 
     /**
      * 根据条件查询
-     * @param stockOutVo
+     * @param stockInOrderId
      * @return
      */
-    List<StockOut> select(StockOutVo stockOutVo);
+    StockOut select(String stockInOrderId);
 }

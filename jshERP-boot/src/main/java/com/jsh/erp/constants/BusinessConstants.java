@@ -204,4 +204,11 @@ public class BusinessConstants {
      * */
     //session的生命周期,秒
     public static final Long MAX_SESSION_IN_SECONDS=60*60*24L;
+
+    /**
+     *  入库出库状态
+     */
+    public static final int STOCK_IN_STATUS = 1;
+    public static final int STOCK_OUT_STATUS = 0;
+    public static final int STOCK_STATUS = -1;
 }

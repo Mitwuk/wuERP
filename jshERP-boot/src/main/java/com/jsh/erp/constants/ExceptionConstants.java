@@ -518,6 +518,14 @@ public class ExceptionConstants {
     public static final int SYSTEM_CONFIG_TEST_USER_CODE = -1;
     public static final String SYSTEM_CONFIG_TEST_USER_MSG = "演示用户禁止操作";
 
+    //
+    public static final int BILL_TYPE_OR_BILL_NAME_NOT_EMPTY_CODE = 4001;
+    public static final String BILL_TYPE_OR_BILL_NAME_NOT_EMPTY_MSG = "单据类型和名称不能为空";
+
+    public static final Integer HTTP_OK_CODE = 200;
+    public static final String HTTP_OK_MESSAGE = "success";
+    public static final Integer HTTP_ERROR_CODE = 500;
+    public static final String HTTP_ERROR_MESSAGE = "error";
 
     /**
      * 标准正常返回/操作成功返回

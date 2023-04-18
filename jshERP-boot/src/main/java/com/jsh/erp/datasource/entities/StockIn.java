@@ -8,14 +8,17 @@ import java.time.LocalDateTime;
 @Data
 @TableName(value = "my_stock_in")
 public class StockIn {
-    private Long id;
+    private long id;
+    private long billId;
+    private String orderId;
     private String productType;
     private String productName;
-    private Integer productAmount;
-    private Double productWeight;
-    private Integer isOther;
+    private int productCount;
+    private double productWeight;
+    private int isOther;
     private String description;
-    private String customer;
+    private String supplier;
+    private int status;
     private String modifyName;
     private LocalDateTime modifyTime;
     private String createName;

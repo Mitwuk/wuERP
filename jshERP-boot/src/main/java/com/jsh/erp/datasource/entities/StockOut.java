@@ -1,18 +1,17 @@
 package com.jsh.erp.datasource.entities;
 
+import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
 import java.time.LocalDateTime;
 
 @Data
+@TableName(value = "my_stock_out")
 public class StockOut {
     private long id;
-    private String productType;
-    private String productName;
-    private int productAmount;
-    private double productWeight;
-    private boolean isOther;
-    private String description;
+    private long billId;
+    private String orderId;
+    private String stockInOrderId;
     private String customer;
     private String modifyName;
     private LocalDateTime modifyTime;

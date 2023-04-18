@@ -9,27 +9,4 @@ import java.util.List;
 
 @Repository
 public interface StockOutMapper extends BaseMapper<StockOut> {
-    /**
-     * 创建出库单
-     *
-     * @param stockOut
-     * @return
-     */
-    int create(StockOut stockOut);
-
-    /**
-     * 上传出库信息
-     *
-     * @param stockOut
-     * @return
-     */
-    int upload(StockOut stockOut);
-
-    /**
-     * 根据条件查询
-     *
-     * @param stockOutVo
-     * @return
-     */
-    List<StockOut> select(StockOutVo stockOutVo);
 }
