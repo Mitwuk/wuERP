@@ -10,6 +10,7 @@ import com.jsh.erp.datasource.entities.StockInBill;
 import com.jsh.erp.datasource.mappers.StockInBillMapper;
 import com.jsh.erp.datasource.mappers.StockInMapper;
 import com.jsh.erp.datasource.vo.StockInBillVo;
+import com.jsh.erp.datasource.vo.StockInDetailVo;
 import com.jsh.erp.exception.BusinessRunTimeException;
 import com.jsh.erp.service.stockIn.StockInBillService;
 import org.springframework.beans.BeanUtils;
@@ -18,6 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 public class StockInBillServiceImpl extends ServiceImpl<StockInBillMapper, StockInBill> implements StockInBillService {
@@ -34,6 +36,13 @@ public class StockInBillServiceImpl extends ServiceImpl<StockInBillMapper, Stock
         page.setDesc("create_time");
         return this.page(page, queryWrapper);
     }
+
+    @Override
+    public List<StockInDetailVo> queryStockInDetail() {
+        List<StockInDetailVo> stockInDetailVos = stockInBillMapper.queryStockInDetail();
+        return stockInDetailVos;
+    }
+
 
     @Override
     public int add(StockInBillVo stockInBillVo) {

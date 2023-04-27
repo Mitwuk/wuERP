@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jsh.erp.datasource.mappers.StockInBillMapper">
+    <resultMap id="stockInDetail" type="com.jsh.erp.datasource.vo.StockInDetailVo">
+        <id column="id" jdbcType="BIGINT" property="id" />
+        <result column="bill_type" jdbcType="VARCHAR" property="billType" />
+        <result column="bill_name" jdbcType="VARCHAR" property="billName" />
+        <result column="create_name" jdbcType="VARCHAR" property="createName" />
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+
+        <collection property="stockInList" ofType="com.jsh.erp.datasource.entities.StockIn">
+            <id column="sid" jdbcType="BIGINT" property="id" />
+            <result column="bill_id" jdbcType="BIGINT" property="billId" />
+            <result column="order_id" jdbcType="VARCHAR" property="orderId" />
+            <result column="product_type" jdbcType="CHAR" property="productType" />
+            <result column="product_name" jdbcType="CHAR" property="productName" />
+            <result column="product_amount" jdbcType="INTEGER" property="productAmount" />
+            <result column="product_weight" jdbcType="DOUBLE" property="productWeight" />
+            <result column="description" jdbcType="VARCHAR" property="description" />
+            <result column="supplier" jdbcType="VARCHAR" property="supplier" />
+            <result column="status" jdbcType="INTEGER" property="status" />
+            <result column="modify_name" jdbcType="VARCHAR" property="modifyName" />
+            <result column="modify_time" jdbcType="TIMESTAMP" property="modifyTime" />
+            <result column="create_name" jdbcType="VARCHAR" property="createName" />
+            <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+        </collection>
+    </resultMap>
+
+    <select id="queryStockInDetail" resultMap="stockInDetail">
+        select b.*, i.*, i.id as sid from my_stock_in_bill b inner join my_stock_in i where b.id = i.bill_id
+    </select>
+</mapper>
