@@ -4,7 +4,6 @@ import com.jsh.erp.datasource.common.QueryRequest;
 import lombok.Data;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
 
 @Data
 public class StockInBillVo extends QueryRequest implements Serializable {
@@ -12,6 +11,11 @@ public class StockInBillVo extends QueryRequest implements Serializable {
     private long id;
     private String billType;
     private String billName;
+    private String productName;
+    private String productType;
+    private String supplier;
     private String createName;
-    private LocalDateTime createTime;
+    private String createTime;
+    private String startTime;
+    private String endTime;
 }

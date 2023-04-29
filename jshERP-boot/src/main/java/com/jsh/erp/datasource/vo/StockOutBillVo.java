@@ -12,6 +12,7 @@ public class StockOutBillVo extends QueryRequest implements Serializable {
     private long id;
     private String billType;
     private String billName;
+    private String customer;
     private String createName;
     private LocalDateTime createTime;
 }

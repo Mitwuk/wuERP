@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Service
@@ -38,8 +39,12 @@ public class StockInBillServiceImpl extends ServiceImpl<StockInBillMapper, Stock
     }
 
     @Override
-    public List<StockInDetailVo> queryStockInDetail() {
-        List<StockInDetailVo> stockInDetailVos = stockInBillMapper.queryStockInDetail();
+    public List<StockInDetailVo> queryStockInDetail(StockInBillVo stockInBillVo) {
+        if (!StringUtils.isEmpty(stockInBillVo.getCreateName())) {
+            stockInBillVo.setStartTime(stockInBillVo.getCreateTime() + " 00:00:00");
+            stockInBillVo.setEndTime(stockInBillVo.getCreateTime() + " 23:59:59");
+        }
+        List<StockInDetailVo> stockInDetailVos = stockInBillMapper.queryStockInDetail(stockInBillVo);
         return stockInDetailVos;
     }
 

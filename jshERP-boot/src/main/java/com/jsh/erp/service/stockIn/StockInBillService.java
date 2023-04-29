@@ -11,7 +11,7 @@ public interface StockInBillService {
 
     IPage<StockInBill> selectByPage(StockInBillVo stockInBillVo);
 
-    List<StockInDetailVo> queryStockInDetail();
+    List<StockInDetailVo> queryStockInDetail(StockInBillVo stockInBillVo);
 
     int add(StockInBillVo stockInBillVo);
 

@@ -36,13 +36,13 @@ public class StockInBillController {
     @GetMapping(value = "/select/detail")
     @ApiOperation(value = "分页查询入库单列表（详情）")
     public ResponseBean<Object> selectDetail(StockInBillVo stockInBillVo) {
-        List<StockInDetailVo> stockInDetailVos = stockInBillService.queryStockInDetail();
+        List<StockInDetailVo> stockInDetailVos = stockInBillService.queryStockInDetail(stockInBillVo);
         return ResponseBean.ok(stockInDetailVos);
     }
 
     @PostMapping(value = "/add")
     @ApiOperation(value = "创建入库单")
-    public ResponseBean<Object> add(StockInBillVo stockInBillVo) {
+    public ResponseBean<Object> add(@RequestBody StockInBillVo stockInBillVo) {
         if (BooleanUtils.toBoolean(stockInBillService.add(stockInBillVo))) {
             return ResponseBean.ok();
         }

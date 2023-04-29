@@ -13,6 +13,7 @@ public class StockIn {
     private String orderId;
     private String productType;
     private String productName;
+    private String productSize;
     private int productCount;
     private double productWeight;
     private String description;

@@ -11,6 +11,7 @@ public class StockInBill {
     private int id;
     private String billType;
     private String billName;
+    private String supplier;
     private String createName;
     private LocalDateTime createTime;
 }

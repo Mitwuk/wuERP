@@ -12,8 +12,9 @@
             <id column="sid" jdbcType="BIGINT" property="id" />
             <result column="bill_id" jdbcType="BIGINT" property="billId" />
             <result column="order_id" jdbcType="VARCHAR" property="orderId" />
-            <result column="product_type" jdbcType="CHAR" property="productType" />
-            <result column="product_name" jdbcType="CHAR" property="productName" />
+            <result column="product_type" jdbcType="VARCHAR" property="productType" />
+            <result column="product_name" jdbcType="VARCHAR" property="productName" />
+            <result column="product_size" jdbcType="VARCHAR" property="productSize" />
             <result column="product_amount" jdbcType="INTEGER" property="productAmount" />
             <result column="product_weight" jdbcType="DOUBLE" property="productWeight" />
             <result column="description" jdbcType="VARCHAR" property="description" />
@@ -27,6 +28,23 @@
     </resultMap>
 
     <select id="queryStockInDetail" resultMap="stockInDetail">
-        select b.*, i.*, i.id as sid from my_stock_in_bill b inner join my_stock_in i where b.id = i.bill_id
+        select b.*, i.*, i.id as sid from my_stock_in_bill b
+            inner join my_stock_in i on b.id = i.bill_id
+        where 1 = 1
+        <if test="startTime != null">
+            and b.create_time <![CDATA[ >= ]]> #{startTime}
+        </if>
+        <if test="endTime != null">
+            and b.create_time <![CDATA[ <= ]]> #{endTime}
+        </if>
+        <if test="productName != null">
+            and i.product_name = #{productName}
+        </if>
+        <if test="supplier != null">
+            and b.supplier = #{supplier}
+        </if>
+        <if test="productType != null">
+            and i.product_type = #{productType}
+        </if>
     </select>
 </mapper>

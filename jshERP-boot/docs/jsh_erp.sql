@@ -1012,6 +1012,7 @@ CREATE TABLE `my_stock_in` (
    `order_id` varchar(255) DEFAULT NULL COMMENT '流水号',
    `product_type` varchar(255) DEFAULT NULL COMMENT '产品类型(编号)',
    `product_name` varchar(255) DEFAULT NULL COMMENT '产品名称',
+   `product_size` varchar(255) DEFAULT NULL COMMENT '产品规格',
    `product_count` int(11) DEFAULT NULL COMMENT '产品只数',
    `product_weight` double DEFAULT NULL COMMENT '产品重量',
    `description` varchar(255) DEFAULT '' COMMENT '描述信息',
@@ -1032,6 +1033,7 @@ CREATE TABLE `my_stock_in_bill` (
     `id` bigint(20) NOT NULL AUTO_INCREMENT,
     `bill_type` varchar(255) DEFAULT NULL COMMENT '单据类型',
     `bill_name` varchar(255) DEFAULT NULL COMMENT '单据名称',
+    `supplier` varchar(255) DEFAULT NULL COMMENT '供应商',
     `create_name` varchar(255) DEFAULT NULL,
     `create_time` datetime DEFAULT NULL,
     PRIMARY KEY (`id`)
@@ -1062,6 +1064,7 @@ CREATE TABLE `my_stock_out_bill` (
     `id` bigint(20) NOT NULL AUTO_INCREMENT,
     `bill_type` varchar(255) DEFAULT NULL COMMENT '单据类型',
     `bill_name` varchar(255) DEFAULT NULL COMMENT '单据名称',
+    `customer` varchar(255) DEFAULT NULL COMMENT '客户',
     `create_name` varchar(255) DEFAULT NULL,
     `create_time` datetime DEFAULT NULL,
     PRIMARY KEY (`id`)

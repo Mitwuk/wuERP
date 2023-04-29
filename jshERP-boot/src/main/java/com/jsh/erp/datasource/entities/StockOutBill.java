@@ -11,6 +11,7 @@ public class StockOutBill {
     private int id;
     private String billType;
     private String billName;
+    private String customer;
     private String createName;
     private LocalDateTime createTime;
 }

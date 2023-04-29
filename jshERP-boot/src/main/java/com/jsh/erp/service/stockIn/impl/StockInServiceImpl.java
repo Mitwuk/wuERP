@@ -99,7 +99,7 @@ public class StockInServiceImpl extends ServiceImpl<StockInMapper, StockIn> impl
             stockInTotal.setWeight(totalWeight.get());
             stockInTotal.setCount(totalCount.get());
             stockInTotal.setAmount(value.size());
-            stockInTotal.setMaxDay(calcLocalDateTime(collect.get(0).getCreateTime(), LocalDateTime.now()));
+            stockInTotal.setMaxHour(calcLocalDateTime(collect.get(0).getCreateTime(), LocalDateTime.now()));
             stockInTotal.setStockIns(collect);
             stockInTotalList.add(stockInTotal);
         }

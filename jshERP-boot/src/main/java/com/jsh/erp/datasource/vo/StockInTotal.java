@@ -14,6 +14,6 @@ public class StockInTotal implements Serializable {
     private double weight;
     private int count;
     private int amount;
-    private long maxDay;
+    private long maxHour;
     private List<StockIn> stockIns;
 }
