@@ -118,6 +118,7 @@ public class StockInServiceImpl extends ServiceImpl<StockInMapper, StockIn> impl
             Optional<Integer> totalCount = value.stream().map(StockInVo::getProductCount).reduce(Integer::sum);
             stockInTotal.setProductName(value.get(0).getProductName());
             stockInTotal.setProductType(map.getKey());
+            stockInTotal.setProductSize(value.get(0).getProductSize());
             stockInTotal.setWeight(totalWeight.get());
             stockInTotal.setCount(totalCount.get());
             stockInTotal.setAmount(value.size());

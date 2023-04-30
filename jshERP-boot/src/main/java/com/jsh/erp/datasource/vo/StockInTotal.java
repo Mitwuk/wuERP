@@ -10,6 +10,7 @@ public class StockInTotal implements Serializable {
     private static final long serialVersionUID = 8469044149318366527L;
     private String productType;
     private String productName;
+    private String productSize;
     private double weight;
     private int count;
     private int amount;
