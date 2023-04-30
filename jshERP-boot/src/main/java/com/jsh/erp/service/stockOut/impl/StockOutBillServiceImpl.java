@@ -47,10 +47,12 @@ public class StockOutBillServiceImpl extends ServiceImpl<StockOutBillMapper, Sto
 
     @Override
     public List<StockOutDetailVo> queryStockOutDetail(StockOutBillVo stockOutBillVo) {
-        String startString = stockOutBillVo.getCreateTime() + BusinessConstants.START_TIME_SUFFIX;
-        String endString = stockOutBillVo.getCreateTime() + BusinessConstants.END_TIME_SUFFIX;
-        stockOutBillVo.setStartTime(startString);
-        stockOutBillVo.setEndTime(endString);
+        if (!StringUtils.isEmpty(stockOutBillVo.getCreateTime())) {
+            String startString = stockOutBillVo.getCreateTime() + BusinessConstants.START_TIME_SUFFIX;
+            String endString = stockOutBillVo.getCreateTime() + BusinessConstants.END_TIME_SUFFIX;
+            stockOutBillVo.setStartTime(startString);
+            stockOutBillVo.setEndTime(endString);
+        }
         List<StockOutDetailVo> stockOutDetailVos = stockOutBillMapper.queryStockOutDetail(stockOutBillVo);
         for (StockOutDetailVo stockOutDetailVo : stockOutDetailVos) {
             List<StockOutVo> sos = new ArrayList<>();
