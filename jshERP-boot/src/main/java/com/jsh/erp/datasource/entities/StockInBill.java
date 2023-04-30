@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 @Data
 @TableName(value = "my_stock_in_bill")
 public class StockInBill {
-    private int id;
+    private long id;
     private String billType;
     private String billName;
     private String supplier;

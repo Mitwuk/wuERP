@@ -211,4 +211,12 @@ public class BusinessConstants {
     public static final int STOCK_IN_STATUS = 1;
     public static final int STOCK_OUT_STATUS = 0;
     public static final int STOCK_STATUS = -1;
+
+    /**
+     * 时间
+     */
+    public static final String START_TIME_SUFFIX = " 00:00:00";
+    public static final String END_TIME_SUFFIX = " 23:59:59";
+    public static final String CREATE_TIME_FIELD = "create_time";
+    public static final String BILL_ID_FIELD = "bill_id";
 }

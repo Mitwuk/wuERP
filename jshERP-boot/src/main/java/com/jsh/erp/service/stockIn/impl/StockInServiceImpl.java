@@ -50,7 +50,7 @@ public class StockInServiceImpl extends ServiceImpl<StockInMapper, StockIn> impl
             queryWrapper.eq("status", stockInVo.getStatus());
         }
         if (!Objects.isNull(stockInVo.getBillId())) {
-            queryWrapper.eq("bill_id", stockInVo.getBillId());
+            queryWrapper.eq(BusinessConstants.BILL_ID_FIELD, stockInVo.getBillId());
         }
         if (!Objects.isNull(stockInVo.getSupplier())) {
             queryWrapper.eq("supplier", stockInVo.getSupplier());
@@ -62,11 +62,11 @@ public class StockInServiceImpl extends ServiceImpl<StockInMapper, StockIn> impl
             queryWrapper.eq("product_name", stockInVo.getProductName());
         }
         if (!Objects.isNull(stockInVo.getCreateTime())) {
-            String startString = stockInVo.getCreateTime() + " 00:00:00";
-            String endString = stockInVo.getCreateTime() + " 23:59:59";
-            queryWrapper.between("create_time", startString, endString);
+            String startString = stockInVo.getCreateTime() + BusinessConstants.START_TIME_SUFFIX;
+            String endString = stockInVo.getCreateTime() + BusinessConstants.END_TIME_SUFFIX;
+            queryWrapper.between(BusinessConstants.CREATE_TIME_FIELD, startString, endString);
         }
-        queryWrapper.orderByDesc("create_time");
+        queryWrapper.orderByDesc(BusinessConstants.CREATE_TIME_FIELD);
         return stockInMapper.selectList(queryWrapper);
     }
 

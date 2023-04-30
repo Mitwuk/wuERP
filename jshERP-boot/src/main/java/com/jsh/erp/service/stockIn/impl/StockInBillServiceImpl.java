@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.jsh.erp.constants.BusinessConstants;
 import com.jsh.erp.constants.ExceptionConstants;
 import com.jsh.erp.datasource.entities.StockIn;
 import com.jsh.erp.datasource.entities.StockInBill;
@@ -16,11 +17,14 @@ import com.jsh.erp.service.stockIn.StockInBillService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class StockInBillServiceImpl extends ServiceImpl<StockInBillMapper, StockInBill> implements StockInBillService {
@@ -34,18 +38,53 @@ public class StockInBillServiceImpl extends ServiceImpl<StockInBillMapper, Stock
     public IPage<StockInBill> selectByPage(StockInBillVo stockInBillVo) {
         QueryWrapper<StockInBill> queryWrapper = new QueryWrapper<>();
         Page<StockInBill> page = new Page<>(stockInBillVo.getPageNum(), stockInBillVo.getPageSize());
-        page.setDesc("create_time");
+        page.setDesc(BusinessConstants.CREATE_TIME_FIELD);
         return this.page(page, queryWrapper);
     }
 
     @Override
-    public List<StockInDetailVo> queryStockInDetail(StockInBillVo stockInBillVo) {
+    public List queryStockInDetail(StockInBillVo stockInBillVo) {
         if (!StringUtils.isEmpty(stockInBillVo.getCreateTime())) {
-            stockInBillVo.setStartTime(stockInBillVo.getCreateTime() + " 00:00:00");
-            stockInBillVo.setEndTime(stockInBillVo.getCreateTime() + " 23:59:59");
+            stockInBillVo.setStartTime(stockInBillVo.getCreateTime() + BusinessConstants.START_TIME_SUFFIX);
+            stockInBillVo.setEndTime(stockInBillVo.getCreateTime() + BusinessConstants.END_TIME_SUFFIX);
         }
-        List<StockInDetailVo> stockInDetailVos = stockInBillMapper.queryStockInDetail(stockInBillVo);
-        return stockInDetailVos;
+
+        QueryWrapper<StockInBill> queryWrapper = new QueryWrapper<>();
+        if (!Objects.isNull(stockInBillVo.getCreateTime())) {
+            String startString = stockInBillVo.getCreateTime() + BusinessConstants.START_TIME_SUFFIX;
+            String endString = stockInBillVo.getCreateTime() + BusinessConstants.END_TIME_SUFFIX;
+            queryWrapper.between(BusinessConstants.CREATE_TIME_FIELD, startString, endString);
+        }
+        queryWrapper.orderByDesc(BusinessConstants.CREATE_TIME_FIELD);
+        // 查询入库单
+        List<StockInBill> stockInBillList = stockInBillMapper.selectList(queryWrapper);
+        if (CollectionUtils.isEmpty(stockInBillList)) {
+            return Collections.EMPTY_LIST;
+        }
+        List<StockInDetailVo> stockInDetail = new ArrayList<>();
+        for (StockInBill stockInBill : stockInBillList) {
+            StockInDetailVo stockInDetailVo = new StockInDetailVo();
+            BeanUtils.copyProperties(stockInBill, stockInDetailVo);
+            stockInDetail.add(stockInDetailVo);
+        }
+        for (StockInDetailVo stockInDetailVo : stockInDetail) {
+            QueryWrapper<StockIn> queryStockIn = new QueryWrapper<>();
+            if (!Objects.isNull(stockInBillVo.getSupplier())) {
+                queryStockIn.eq("supplier", stockInBillVo.getSupplier());
+            }
+            if (!Objects.isNull(stockInBillVo.getProductName())) {
+                queryStockIn.eq("product_name", stockInBillVo.getProductName());
+            }
+            queryStockIn.eq("bill_id", stockInDetailVo.getId());
+            // 查询入库但详情
+            List<StockIn> stockInList = stockInMapper.selectList(queryStockIn);
+            if (CollectionUtils.isEmpty(stockInList)) {
+                // 初始化
+                stockInList = new ArrayList<>();
+            }
+            stockInDetailVo.setStockInList(stockInList);
+        }
+        return stockInDetail;
     }
 
 
@@ -64,7 +103,7 @@ public class StockInBillServiceImpl extends ServiceImpl<StockInBillMapper, Stock
     @Override
     public boolean delete(long id) {
         QueryWrapper<StockIn> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("bill_id", id);
+        queryWrapper.eq(BusinessConstants.BILL_ID_FIELD, id);
         // 根据billId删除入库表
         stockInMapper.delete(queryWrapper);
         return stockInBillMapper.deleteById(id) > 0;

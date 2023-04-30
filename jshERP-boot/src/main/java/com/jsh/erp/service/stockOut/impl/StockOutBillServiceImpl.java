@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.jsh.erp.constants.BusinessConstants;
 import com.jsh.erp.constants.ExceptionConstants;
 import com.jsh.erp.datasource.entities.StockOut;
 import com.jsh.erp.datasource.entities.StockOutBill;
@@ -32,7 +33,7 @@ public class StockOutBillServiceImpl extends ServiceImpl<StockOutBillMapper, Sto
     public IPage<StockOutBill> selectByPage(StockOutBillVo stockOutBillVo) {
         QueryWrapper<StockOutBill> queryWrapper = new QueryWrapper<>();
         Page<StockOutBill> page = new Page<>(stockOutBillVo.getPageNum(), stockOutBillVo.getPageSize());
-        page.setDesc("create_time");
+        page.setDesc(BusinessConstants.CREATE_TIME_FIELD);
         return this.page(page, queryWrapper);
     }
 
@@ -52,7 +53,7 @@ public class StockOutBillServiceImpl extends ServiceImpl<StockOutBillMapper, Sto
     @Transactional(value = "transactionManager", rollbackFor = Exception.class)
     public boolean delete(long id) {
         QueryWrapper<StockOut> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("bill_id", id);
+        queryWrapper.eq(BusinessConstants.BILL_ID_FIELD, id);
         // 删除该出库单对应的
         stockOutMapper.delete(queryWrapper);
         return stockOutBillMapper.deleteById(id) > 0;
