@@ -10,6 +10,7 @@ public class StockInVo implements Serializable {
     private static final long serialVersionUID = -4707963744247341571L;
     private long id;
     private Long billId;
+    private String billName;
     private String orderId;
     private String productType;
     private String productName;

@@ -27,7 +27,7 @@ public interface StockInService {
      * @param stockInVo
      * @return
      */
-    List<StockIn> select(StockInVo stockInVo);
+    List<StockInVo> select(StockInVo stockInVo);
 
     /**
      * 更新状态

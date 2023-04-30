@@ -14,6 +14,6 @@ public class StockOutTotal implements Serializable {
     private double weight;
     private int count;
     private int amount;
-    private String maxHour;
-    private List<StockOut> stockOuts;
+    private long maxHour;
+    private List<StockOutVo> stockOuts;
 }

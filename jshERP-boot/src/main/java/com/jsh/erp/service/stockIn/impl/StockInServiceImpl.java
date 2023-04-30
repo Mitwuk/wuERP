@@ -5,7 +5,11 @@ import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.jsh.erp.constants.BusinessConstants;
 import com.jsh.erp.datasource.entities.StockIn;
+import com.jsh.erp.datasource.entities.StockInBill;
+import com.jsh.erp.datasource.mappers.StockInBillMapper;
 import com.jsh.erp.datasource.mappers.StockInMapper;
+import com.jsh.erp.datasource.vo.StockInBillVo;
+import com.jsh.erp.datasource.vo.StockInDetailVo;
 import com.jsh.erp.datasource.vo.StockInTotal;
 import com.jsh.erp.datasource.vo.StockInVo;
 import com.jsh.erp.service.stockIn.StockInService;
@@ -15,6 +19,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -23,6 +28,8 @@ public class StockInServiceImpl extends ServiceImpl<StockInMapper, StockIn> impl
 
     @Autowired
     private StockInMapper stockInMapper;
+    @Autowired
+    private StockInBillMapper stockInBillMapper;
 
     @Override
     public boolean upload(List<StockInVo> stockInVoList) {
@@ -39,12 +46,12 @@ public class StockInServiceImpl extends ServiceImpl<StockInMapper, StockIn> impl
 
     @Override
     public List<StockInTotal> selectAndStatistics(StockInVo stockInVo) {
-        List<StockIn> stockIns = select(stockInVo);
-        return statistics(stockIns);
+        List<StockInVo> stockInVoList = select(stockInVo);
+        return statistics(stockInVoList);
     }
 
     @Override
-    public List<StockIn> select(StockInVo stockInVo) {
+    public List<StockInVo> select(StockInVo stockInVo) {
         QueryWrapper<StockIn> queryWrapper = new QueryWrapper<>();
         if (!Objects.isNull(stockInVo.getStatus()) && stockInVo.getStatus() >= 0) {
             queryWrapper.eq("status", stockInVo.getStatus());
@@ -67,7 +74,22 @@ public class StockInServiceImpl extends ServiceImpl<StockInMapper, StockIn> impl
             queryWrapper.between(BusinessConstants.CREATE_TIME_FIELD, startString, endString);
         }
         queryWrapper.orderByDesc(BusinessConstants.CREATE_TIME_FIELD);
-        return stockInMapper.selectList(queryWrapper);
+        List<StockIn> stockInList = stockInMapper.selectList(queryWrapper);
+        List<StockInVo> stockInVoList = new ArrayList<>();
+        Map<Long, String> billNameMap = new HashMap<>();
+        for (StockIn stockIn : stockInList) {
+            StockInVo stock = new StockInVo();
+            BeanUtils.copyProperties(stockIn, stock);
+            if (!billNameMap.containsKey(stockIn.getBillId())) {
+                StockInBill stockInBill = stockInBillMapper.selectById(stockIn.getBillId());
+                billNameMap.put(stockIn.getBillId(), stockInBill.getBillName());
+            }
+            stock.setBillName(billNameMap.get(stockIn.getBillId()));
+            DateTimeFormatter fmt = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+            stock.setCreateTime(stockIn.getCreateTime().format(fmt));
+            stockInVoList.add(stock);
+        }
+        return stockInVoList;
     }
 
     @Override
@@ -80,20 +102,20 @@ public class StockInServiceImpl extends ServiceImpl<StockInMapper, StockIn> impl
     /**
      * 统计
      *
-     * @param stockIns
+     * @param stockInVoList
      * @return
      */
-    public List<StockInTotal> statistics(List<StockIn> stockIns) {
+    public List<StockInTotal> statistics(List<StockInVo> stockInVoList) {
         List<StockInTotal> stockInTotalList = new ArrayList<>();
-        Map<String, List<StockIn>> stringListMap = stockIns.stream().collect(Collectors.groupingBy(StockIn::getProductType));
-        for (Map.Entry<String, List<StockIn>> map : stringListMap.entrySet()) {
+        Map<String, List<StockInVo>> stringListMap = stockInVoList.stream().collect(Collectors.groupingBy(StockInVo::getProductType));
+        for (Map.Entry<String, List<StockInVo>> map : stringListMap.entrySet()) {
             StockInTotal stockInTotal = new StockInTotal();
-            List<StockIn> value = map.getValue();
-            List<StockIn> collect = value.stream().sorted(Comparator.comparing(StockIn::getCreateTime)).collect(Collectors.toList());
+            List<StockInVo> value = map.getValue();
+            List<StockInVo> collect = value.stream().sorted(Comparator.comparing(StockInVo::getCreateTime)).collect(Collectors.toList());
             // 总重量
-            Optional<Double> totalWeight = value.stream().map(StockIn::getProductWeight).reduce(Double::sum);
+            Optional<Double> totalWeight = value.stream().map(StockInVo::getProductWeight).reduce(Double::sum);
             // 总只数
-            Optional<Integer> totalCount = value.stream().map(StockIn::getProductCount).reduce(Integer::sum);
+            Optional<Integer> totalCount = value.stream().map(StockInVo::getProductCount).reduce(Integer::sum);
             stockInTotal.setProductName(value.get(0).getProductName());
             stockInTotal.setProductType(map.getKey());
             stockInTotal.setWeight(totalWeight.get());
@@ -109,11 +131,13 @@ public class StockInServiceImpl extends ServiceImpl<StockInMapper, StockIn> impl
     /**
      * 计算两个日期时间的相差天数与小时
      *
-     * @param startTime 开始时间
+     * @param startTimeString 开始时间
      * @param endTime   结束时间
      * @return String
      */
-    public long calcLocalDateTime(LocalDateTime startTime, LocalDateTime endTime) {
+    public long calcLocalDateTime(String startTimeString, LocalDateTime endTime) {
+        DateTimeFormatter fmt = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        LocalDateTime startTime = LocalDateTime.parse(startTimeString, fmt);
         Duration between = Duration.between(startTime, endTime);
         return between.toHours();
     }

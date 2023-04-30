@@ -7,10 +7,12 @@ import java.time.LocalDateTime;
 @Data
 public class StockOutVo {
     private long id;
-    private long billId;
+    private Long billId;
+    private String billName;
     private String orderId;
     private String productType;
     private String productName;
+    private String productSize;
     private int productCount;
     private double productWeight;
     /**
@@ -18,7 +20,8 @@ public class StockOutVo {
      */
     private String stockInOrderId;
     private String customer;
+    private int status;
     private String description;
-    private LocalDateTime modifyTime;
-    private LocalDateTime createTime;
+    private String modifyTime;
+    private String createTime;
 }

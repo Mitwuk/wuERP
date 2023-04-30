@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jsh.erp.datasource.mappers.StockOutBillMapper">
+    <resultMap id="stockOutDetail" type="com.jsh.erp.datasource.vo.StockOutDetailVo">
+        <id column="id" jdbcType="BIGINT" property="id" />
+        <result column="bill_type" jdbcType="VARCHAR" property="billType" />
+        <result column="bill_name" jdbcType="VARCHAR" property="billName" />
+        <result column="customer" jdbcType="VARCHAR" property="customer" />
+        <result column="description" jdbcType="VARCHAR" property="description" />
+        <result column="create_name" jdbcType="VARCHAR" property="createName" />
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+
+        <collection property="stockOutList" ofType="com.jsh.erp.datasource.entities.StockIn">
+            <id column="sid" jdbcType="BIGINT" property="id" />
+            <result column="bill_id" jdbcType="BIGINT" property="billId" />
+            <result column="order_id" jdbcType="VARCHAR" property="orderId" />
+            <result column="product_type" jdbcType="VARCHAR" property="productType" />
+            <result column="product_name" jdbcType="VARCHAR" property="productName" />
+            <result column="product_size" jdbcType="VARCHAR" property="productSize" />
+            <result column="product_count" jdbcType="INTEGER" property="productCount" />
+            <result column="product_weight" jdbcType="DOUBLE" property="productWeight" />
+            <result column="description" jdbcType="VARCHAR" property="description" />
+            <result column="supplier" jdbcType="VARCHAR" property="supplier" />
+            <result column="status" jdbcType="INTEGER" property="status" />
+            <result column="modify_name" jdbcType="VARCHAR" property="modifyName" />
+            <result column="modify_time" jdbcType="TIMESTAMP" property="modifyTime" />
+            <result column="create_name" jdbcType="VARCHAR" property="createName" />
+            <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+        </collection>
+    </resultMap>
+
+    <select id="queryStockOutDetail" resultMap="stockOutDetail">
+        select b.id,b.bill_type,b.bill_name,b.customer,b.create_name,b.create_time,o.order_id,o.stock_in_order_id,o.description,
+        i.*, i.id as sid
+        from my_stock_out_bill b
+        left join my_stock_out o on b.id=o.bill_id
+        left join my_stock_in i on o.stock_in_order_id = i.order_id
+        where 1 = 1
+        <if test="startTime != null">
+            and o.create_time <![CDATA[ >= ]]> #{startTime}
+        </if>
+        <if test="endTime != null">
+            and o.create_time <![CDATA[ <= ]]> #{endTime}
+        </if>
+        <if test="productName != null">
+            and i.product_name = #{productName}
+        </if>
+        <if test="customer != null">
+            and o.customer = #{customer}
+        </if>
+        <if test="productType != null">
+            and i.product_type = #{productType}
+        </if>
+    </select>
+</mapper>

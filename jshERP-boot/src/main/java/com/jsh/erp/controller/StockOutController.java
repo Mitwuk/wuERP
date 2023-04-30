@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.jsh.erp.constants.BusinessConstants.STOCK_OUT_STATUS;
@@ -40,8 +41,8 @@ public class StockOutController {
     @ApiOperation(value = "查询出库信息")
     public ResponseBean<List<StockOutVo>> select(StockInVo stockInVo) {
         stockInVo.setStatus(STOCK_OUT_STATUS);
-        List<StockIn> stockInList = stockInService.select(stockInVo);
-        return ResponseBean.ok(stockOutService.selectByOrderId(stockInList));
+//        List<StockIn> stockInList = stockInService.select(stockInVo);
+        return ResponseBean.ok(stockOutService.selectByOrderId(new ArrayList<>()));
     }
 
     /**
@@ -51,8 +52,8 @@ public class StockOutController {
      */
     @GetMapping(value = "/detail")
     @ApiOperation(value = "查询出库详情")
-    public ResponseBean<StockOut> detail(String stockInOrderId) {
-        return ResponseBean.ok(stockOutService.select(stockInOrderId));
+    public ResponseBean<List<StockOutVo>> detail(StockOutVo stockOutVo) {
+        return ResponseBean.ok(stockOutService.select(stockOutVo));
     }
 
     /**

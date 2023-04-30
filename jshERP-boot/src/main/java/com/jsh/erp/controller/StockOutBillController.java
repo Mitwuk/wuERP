@@ -1,7 +1,9 @@
 package com.jsh.erp.controller;
 
 import com.jsh.erp.datasource.common.ResponseBean;
+import com.jsh.erp.datasource.vo.StockInDetailVo;
 import com.jsh.erp.datasource.vo.StockOutBillVo;
+import com.jsh.erp.datasource.vo.StockOutDetailVo;
 import com.jsh.erp.service.stockOut.StockOutBillService;
 import com.jsh.erp.utils.QueryUtils;
 import io.swagger.annotations.Api;
@@ -11,6 +13,7 @@ import org.apache.commons.lang3.BooleanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
 import static com.jsh.erp.constants.ExceptionConstants.*;
@@ -29,6 +32,12 @@ public class StockOutBillController {
     public ResponseBean<Object> selectByPage(StockOutBillVo stockOutBillVo) {
         Map<String, Object> dataTable = QueryUtils.getDataTable(stockOutBillService.selectByPage(stockOutBillVo));
         return ResponseBean.ok(dataTable);
+    }
+
+    @GetMapping(value = "/select/detail")
+    @ApiOperation(value = "分页查询出库单列表（详情）")
+    public ResponseBean<List<StockOutDetailVo>> selectDetail(StockOutBillVo stockOutBillVo) {
+        return ResponseBean.ok(stockOutBillService.queryStockOutDetail(stockOutBillVo));
     }
 
     @PostMapping(value = "/add")

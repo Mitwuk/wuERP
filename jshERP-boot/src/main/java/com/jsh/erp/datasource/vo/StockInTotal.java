@@ -1,6 +1,5 @@
 package com.jsh.erp.datasource.vo;
 
-import com.jsh.erp.datasource.entities.StockIn;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -15,5 +14,5 @@ public class StockInTotal implements Serializable {
     private int count;
     private int amount;
     private long maxHour;
-    private List<StockIn> stockIns;
+    private List<StockInVo> stockIns;
 }

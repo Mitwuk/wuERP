@@ -29,7 +29,7 @@ public class StockInController {
      */
     @GetMapping(value = "/select/stockin")
     @ApiOperation(value = "查询入库信息")
-    public ResponseBean<List<StockIn>> selectStockIn(StockInVo stockInVo) {
+    public ResponseBean<List<StockInVo>> selectStockIn(StockInVo stockInVo) {
         return ResponseBean.ok(stockInService.select(stockInVo));
     }
 

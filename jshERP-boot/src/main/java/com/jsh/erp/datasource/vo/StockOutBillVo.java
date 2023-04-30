@@ -1,5 +1,6 @@
 package com.jsh.erp.datasource.vo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.jsh.erp.datasource.common.QueryRequest;
 import lombok.Data;
 
@@ -13,6 +14,16 @@ public class StockOutBillVo extends QueryRequest implements Serializable {
     private String billType;
     private String billName;
     private String customer;
+    private String description;
     private String createName;
-    private LocalDateTime createTime;
+    private String createTime;
+    @JsonIgnore
+    private String productName;
+    @JsonIgnore
+    private String productType;
+    @JsonIgnore
+    private String startTime;
+    @JsonIgnore
+    private String endTime;
+
 }

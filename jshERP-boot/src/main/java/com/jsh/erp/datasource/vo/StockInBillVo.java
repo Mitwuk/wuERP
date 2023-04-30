@@ -12,13 +12,13 @@ public class StockInBillVo extends QueryRequest implements Serializable {
     private long id;
     private String billType;
     private String billName;
+    private String supplier;
+    private String createName;
+    private String createTime;
     @JsonIgnore
     private String productName;
     @JsonIgnore
     private String productType;
-    private String supplier;
-    private String createName;
-    private String createTime;
     @JsonIgnore
     private String startTime;
     @JsonIgnore

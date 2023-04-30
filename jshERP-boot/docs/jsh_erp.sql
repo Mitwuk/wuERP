@@ -1047,7 +1047,7 @@ CREATE TABLE `my_stock_out` (
     `id` bigint(20) NOT NULL AUTO_INCREMENT,
     `bill_id` bigint(20) DEFAULT NULL COMMENT '账单ID',
     `order_id` varchar(255) DEFAULT NULL COMMENT '出库流水号',
-    `stock_in_order_id` bigint(20) DEFAULT NULL COMMENT '入库流水号',
+    `stock_in_order_id` varchar(255) DEFAULT NULL COMMENT '入库流水号',
     `customer` varchar(255) DEFAULT NULL COMMENT '客户名称',
     `description` varchar(255) DEFAULT '' COMMENT '备注信息',
     `modify_name` varchar(255) DEFAULT NULL COMMENT '修改人名称',
@@ -1055,7 +1055,7 @@ CREATE TABLE `my_stock_out` (
     `create_name` varchar(255) DEFAULT NULL COMMENT '创建人名称',
     `create_time` datetime DEFAULT NULL COMMENT '创建时间',
     PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 /**
   出库单表

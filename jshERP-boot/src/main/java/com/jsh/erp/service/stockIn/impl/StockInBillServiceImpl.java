@@ -57,6 +57,7 @@ public class StockInBillServiceImpl extends ServiceImpl<StockInBillMapper, Stock
         if (CollectionUtils.isEmpty(stockInBillList)) {
             return Collections.EMPTY_LIST;
         }
+        // 对象转换
         List<StockInDetailVo> stockInDetail = new ArrayList<>();
         for (StockInBill stockInBill : stockInBillList) {
             StockInDetailVo stockInDetailVo = new StockInDetailVo();
