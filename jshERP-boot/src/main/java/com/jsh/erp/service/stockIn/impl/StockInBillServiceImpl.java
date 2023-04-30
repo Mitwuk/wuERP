@@ -21,6 +21,7 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -43,12 +44,7 @@ public class StockInBillServiceImpl extends ServiceImpl<StockInBillMapper, Stock
     }
 
     @Override
-    public List queryStockInDetail(StockInBillVo stockInBillVo) {
-        if (!StringUtils.isEmpty(stockInBillVo.getCreateTime())) {
-            stockInBillVo.setStartTime(stockInBillVo.getCreateTime() + BusinessConstants.START_TIME_SUFFIX);
-            stockInBillVo.setEndTime(stockInBillVo.getCreateTime() + BusinessConstants.END_TIME_SUFFIX);
-        }
-
+    public List<StockInDetailVo> queryStockInDetail(StockInBillVo stockInBillVo) {
         QueryWrapper<StockInBill> queryWrapper = new QueryWrapper<>();
         if (!Objects.isNull(stockInBillVo.getCreateTime())) {
             String startString = stockInBillVo.getCreateTime() + BusinessConstants.START_TIME_SUFFIX;
@@ -65,6 +61,8 @@ public class StockInBillServiceImpl extends ServiceImpl<StockInBillMapper, Stock
         for (StockInBill stockInBill : stockInBillList) {
             StockInDetailVo stockInDetailVo = new StockInDetailVo();
             BeanUtils.copyProperties(stockInBill, stockInDetailVo);
+            DateTimeFormatter fmt = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+            stockInDetailVo.setCreateTime(stockInBill.getCreateTime().format(fmt));
             stockInDetail.add(stockInDetailVo);
         }
         for (StockInDetailVo stockInDetailVo : stockInDetail) {
