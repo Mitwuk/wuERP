@@ -20,5 +20,6 @@ public class StockInVo implements Serializable {
     private String description;
     private String supplier;
     private Integer status;
+    private long stockHour;
     private String createTime;
 }

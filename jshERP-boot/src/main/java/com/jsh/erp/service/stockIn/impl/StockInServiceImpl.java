@@ -84,6 +84,10 @@ public class StockInServiceImpl extends ServiceImpl<StockInMapper, StockIn> impl
                 StockInBill stockInBill = stockInBillMapper.selectById(stockIn.getBillId());
                 billNameMap.put(stockIn.getBillId(), stockInBill.getBillName());
             }
+            if (BusinessConstants.STOCK_IN_STATUS == stockIn.getStatus()) {
+                Duration between = Duration.between(stockIn.getCreateTime(), LocalDateTime.now());
+                stock.setStockHour(between.toHours());
+            }
             stock.setBillName(billNameMap.get(stockIn.getBillId()));
             DateTimeFormatter fmt = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
             stock.setCreateTime(stockIn.getCreateTime().format(fmt));
