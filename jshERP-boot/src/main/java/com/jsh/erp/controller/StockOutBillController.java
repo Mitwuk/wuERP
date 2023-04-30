@@ -42,7 +42,7 @@ public class StockOutBillController {
 
     @PostMapping(value = "/add")
     @ApiOperation(value = "创建出库单")
-    public ResponseBean<Object> add(StockOutBillVo stockOutBillVo) {
+    public ResponseBean<Object> add(@RequestBody StockOutBillVo stockOutBillVo) {
         if (BooleanUtils.toBoolean(stockOutBillService.add(stockOutBillVo))) {
             return ResponseBean.ok();
         }

@@ -66,7 +66,8 @@ public class StockInBillServiceImpl extends ServiceImpl<StockInBillMapper, Stock
             stockInDetailVo.setCreateTime(stockInBill.getCreateTime().format(fmt));
             stockInDetail.add(stockInDetailVo);
         }
-        for (StockInDetailVo stockInDetailVo : stockInDetail) {
+        for (int i = 0; i < stockInDetail.size(); i++) {
+            StockInDetailVo stockInDetailVo = stockInDetail.get(i);
             QueryWrapper<StockIn> queryStockIn = new QueryWrapper<>();
             if (!Objects.isNull(stockInBillVo.getSupplier())) {
                 queryStockIn.eq("supplier", stockInBillVo.getSupplier());
@@ -78,6 +79,8 @@ public class StockInBillServiceImpl extends ServiceImpl<StockInBillMapper, Stock
             // 查询入库但详情
             List<StockIn> stockInList = stockInMapper.selectList(queryStockIn);
             if (CollectionUtils.isEmpty(stockInList) && (!Objects.isNull(stockInBillVo.getSupplier()) || !Objects.isNull(stockInBillVo.getProductName()))) {
+                stockInDetail.remove(i);
+                i--;
                 continue;
             }
             if (CollectionUtils.isEmpty(stockInList)) {
