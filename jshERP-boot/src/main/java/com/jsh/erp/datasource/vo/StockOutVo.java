@@ -20,8 +20,11 @@ public class StockOutVo {
      */
     private String stockInOrderId;
     private String customer;
+    private String supplier;
     private int status;
     private String description;
     private String modifyTime;
+    private String modifyName;
+    private String createName;
     private String createTime;
 }

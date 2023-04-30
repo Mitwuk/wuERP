@@ -36,8 +36,6 @@ public class StockOutBillServiceImpl extends ServiceImpl<StockOutBillMapper, Sto
     private StockOutBillMapper stockOutBillMapper;
     @Autowired
     private StockOutMapper stockOutMapper;
-    @Autowired
-    private StockInMapper stockInMapper;
 
     @Override
     public IPage<StockOutBill> selectByPage(StockOutBillVo stockOutBillVo) {
@@ -49,7 +47,18 @@ public class StockOutBillServiceImpl extends ServiceImpl<StockOutBillMapper, Sto
 
     @Override
     public List<StockOutDetailVo> queryStockOutDetail(StockOutBillVo stockOutBillVo) {
-        return stockOutBillMapper.queryStockOutDetail(stockOutBillVo);
+        List<StockOutDetailVo> stockOutDetailVos = stockOutBillMapper.queryStockOutDetail(stockOutBillVo);
+        for (StockOutDetailVo stockOutDetailVo : stockOutDetailVos) {
+            List<StockOutVo> sos = new ArrayList<>();
+            for (StockOutVo stockOutVo : stockOutDetailVo.getStockOutList()) {
+                if (StringUtils.isEmpty(stockOutVo.getStockInOrderId())) {
+                    continue;
+                }
+                sos.add(stockOutVo);
+            }
+            stockOutDetailVo.setStockOutList(sos);
+        }
+        return stockOutDetailVos;
     }
 
     @Override
