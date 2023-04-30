@@ -77,6 +77,9 @@ public class StockInBillServiceImpl extends ServiceImpl<StockInBillMapper, Stock
             queryStockIn.eq("bill_id", stockInDetailVo.getId());
             // 查询入库但详情
             List<StockIn> stockInList = stockInMapper.selectList(queryStockIn);
+            if (CollectionUtils.isEmpty(stockInList) && (!Objects.isNull(stockInBillVo.getSupplier()) || !Objects.isNull(stockInBillVo.getProductName()))) {
+                continue;
+            }
             if (CollectionUtils.isEmpty(stockInList)) {
                 // 初始化
                 stockInList = new ArrayList<>();
