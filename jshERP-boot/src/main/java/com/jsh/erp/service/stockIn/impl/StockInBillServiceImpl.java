@@ -40,7 +40,7 @@ public class StockInBillServiceImpl extends ServiceImpl<StockInBillMapper, Stock
 
     @Override
     public List<StockInDetailVo> queryStockInDetail(StockInBillVo stockInBillVo) {
-        if (!StringUtils.isEmpty(stockInBillVo.getCreateName())) {
+        if (!StringUtils.isEmpty(stockInBillVo.getCreateTime())) {
             stockInBillVo.setStartTime(stockInBillVo.getCreateTime() + " 00:00:00");
             stockInBillVo.setEndTime(stockInBillVo.getCreateTime() + " 23:59:59");
         }
