@@ -1,24 +1,19 @@
 package com.jsh.erp.controller;
 
 import com.jsh.erp.datasource.common.ResponseBean;
-import com.jsh.erp.datasource.entities.StockIn;
-import com.jsh.erp.datasource.entities.StockOut;
-import com.jsh.erp.datasource.vo.StockInTotal;
-import com.jsh.erp.datasource.vo.StockInVo;
 import com.jsh.erp.datasource.vo.StockOutVo;
-import com.jsh.erp.service.stockIn.StockInService;
 import com.jsh.erp.service.stockOut.StockOutService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletResponse;
-import java.util.ArrayList;
 import java.util.List;
-
-import static com.jsh.erp.constants.BusinessConstants.STOCK_OUT_STATUS;
 
 @RestController
 @RequestMapping(value = "/stockout")
@@ -29,32 +24,6 @@ public class StockOutController {
     @Autowired
     private StockOutService stockOutService;
 
-    @Autowired
-    private StockInService stockInService;
-
-    /**
-     * 查询出库列表和详情
-     *
-     * @return
-     */
-    @GetMapping(value = "/select")
-    @ApiOperation(value = "查询出库信息")
-    public ResponseBean<List<StockOutVo>> select(StockInVo stockInVo) {
-        stockInVo.setStatus(STOCK_OUT_STATUS);
-//        List<StockIn> stockInList = stockInService.select(stockInVo);
-        return ResponseBean.ok(stockOutService.selectByOrderId(new ArrayList<>()));
-    }
-
-    /**
-     * 查询出库信息
-     *
-     * @return
-     */
-    @GetMapping(value = "/detail")
-    @ApiOperation(value = "查询出库详情")
-    public ResponseBean<List<StockOutVo>> detail(StockOutVo stockOutVo) {
-        return ResponseBean.ok(stockOutService.select(stockOutVo));
-    }
 
     /**
      * 上传出库信息

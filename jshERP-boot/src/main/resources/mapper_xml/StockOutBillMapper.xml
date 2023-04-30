@@ -37,19 +37,20 @@
         left join my_stock_in i on o.stock_in_order_id = i.order_id
         where 1 = 1
         <if test="startTime != null">
-            and o.create_time <![CDATA[ >= ]]> #{startTime}
+            and b.create_time <![CDATA[ >= ]]> #{startTime}
         </if>
         <if test="endTime != null">
-            and o.create_time <![CDATA[ <= ]]> #{endTime}
+            and b.create_time <![CDATA[ <= ]]> #{endTime}
         </if>
         <if test="productName != null">
             and i.product_name = #{productName}
         </if>
         <if test="customer != null">
-            and o.customer = #{customer}
+            and b.customer = #{customer}
         </if>
         <if test="productType != null">
             and i.product_type = #{productType}
         </if>
+        order by b.create_time desc
     </select>
 </mapper>
