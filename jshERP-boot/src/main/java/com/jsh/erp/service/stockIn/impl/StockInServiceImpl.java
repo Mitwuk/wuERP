@@ -47,7 +47,10 @@ public class StockInServiceImpl extends ServiceImpl<StockInMapper, StockIn> impl
     @Override
     public List<StockInTotal> selectAndStatistics(StockInVo stockInVo) {
         List<StockInVo> stockInVoList = select(stockInVo);
-        return statistics(stockInVoList);
+        List<StockInTotal> statistics = statistics(stockInVoList);
+        statistics.sort((a, b) -> Math.toIntExact(a.getMaxHour() - b.getMaxHour()));
+        Collections.reverse(statistics);
+        return statistics;
     }
 
     @Override
