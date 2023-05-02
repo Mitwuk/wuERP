@@ -1017,14 +1017,14 @@ CREATE TABLE `my_stock_in` (
                              `product_weight` double DEFAULT NULL COMMENT '产品重量',
                              `description` varchar(255) DEFAULT '' COMMENT '描述信息',
                              `supplier` varchar(255) DEFAULT NULL COMMENT '供应商',
-                             `status` tinyint(4) DEFAULT NULL COMMENT '状态：1是库存；0是出库',
+                             `status` tinyint(4) DEFAULT NULL COMMENT '状态：1是库存；2是出库',
                              `modify_name` varchar(255) DEFAULT NULL COMMENT '修改人名称',
                              `modify_time` datetime DEFAULT NULL COMMENT '修改时间',
                              `create_name` varchar(255) DEFAULT NULL COMMENT '创建人名称',
                              `create_time` timestamp NULL DEFAULT NULL COMMENT '创建时间',
                              PRIMARY KEY (`id`),
                              UNIQUE KEY `order_id` (`order_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
 /**
@@ -1038,7 +1038,7 @@ CREATE TABLE `my_stock_in_bill` (
                                   `create_name` varchar(255) DEFAULT NULL,
                                   `create_time` datetime DEFAULT NULL,
                                   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
 /**
@@ -1049,6 +1049,11 @@ CREATE TABLE `my_stock_out` (
                               `bill_id` bigint(20) DEFAULT NULL COMMENT '账单ID',
                               `order_id` varchar(255) DEFAULT NULL COMMENT '出库流水号',
                               `stock_in_order_id` varchar(255) DEFAULT NULL COMMENT '入库流水号',
+                              `product_type` varchar(255) DEFAULT NULL COMMENT '产品类型(编号)',
+                              `product_name` varchar(255) DEFAULT NULL COMMENT '产品名称',
+                              `product_size` varchar(255) DEFAULT NULL COMMENT '产品规格',
+                              `product_count` int(11) DEFAULT NULL COMMENT '产品只数',
+                              `product_weight` double DEFAULT NULL COMMENT '产品重量',
                               `customer` varchar(255) DEFAULT NULL COMMENT '客户名称',
                               `description` varchar(255) DEFAULT '' COMMENT '备注信息',
                               `modify_name` varchar(255) DEFAULT NULL COMMENT '修改人名称',
@@ -1057,7 +1062,7 @@ CREATE TABLE `my_stock_out` (
                               `create_time` datetime DEFAULT NULL COMMENT '创建时间',
                               PRIMARY KEY (`id`),
                               UNIQUE KEY `stock_in_order_id` (`stock_in_order_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 /**
   出库单表
@@ -1070,4 +1075,4 @@ CREATE TABLE `my_stock_out_bill` (
                                    `create_name` varchar(255) DEFAULT NULL,
                                    `create_time` datetime DEFAULT NULL,
                                    PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
