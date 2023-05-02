@@ -1,24 +1,19 @@
 package com.jsh.erp.service.stockOut.impl;
 
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.jsh.erp.constants.BusinessConstants;
 import com.jsh.erp.datasource.entities.StockIn;
-import com.jsh.erp.datasource.entities.StockInBill;
 import com.jsh.erp.datasource.entities.StockOut;
 import com.jsh.erp.datasource.entities.StockOutBill;
-import com.jsh.erp.datasource.mappers.StockInBillMapper;
 import com.jsh.erp.datasource.mappers.StockInMapper;
 import com.jsh.erp.datasource.mappers.StockOutBillMapper;
 import com.jsh.erp.datasource.mappers.StockOutMapper;
 import com.jsh.erp.datasource.vo.StockInTotal;
-import com.jsh.erp.datasource.vo.StockInVo;
 import com.jsh.erp.datasource.vo.StockOutTotal;
 import com.jsh.erp.datasource.vo.StockOutVo;
 import com.jsh.erp.service.stockIn.StockInService;
 import com.jsh.erp.service.stockOut.StockOutService;
-import com.jsh.erp.utils.Constants;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -52,8 +47,8 @@ public class StockOutServiceImpl extends ServiceImpl<StockOutMapper, StockOut> i
             StockOut stockOut = new StockOut();
             BeanUtils.copyProperties(stockOutVo, stockOut);
             stockOut.setCreateTime(LocalDateTime.now());
-            stockOutList.add(stockOut);
             stockInService.updateStatus(stockOutVo.getStockInOrderId(), STOCK_OUT_STATUS);
+            stockOutList.add(stockOut);
         }
         return this.saveBatch(stockOutList);
     }

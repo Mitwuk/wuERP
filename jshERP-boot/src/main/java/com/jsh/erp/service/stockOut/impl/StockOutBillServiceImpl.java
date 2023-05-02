@@ -6,28 +6,26 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.jsh.erp.constants.BusinessConstants;
 import com.jsh.erp.constants.ExceptionConstants;
-import com.jsh.erp.datasource.entities.StockIn;
-import com.jsh.erp.datasource.entities.StockInBill;
 import com.jsh.erp.datasource.entities.StockOut;
 import com.jsh.erp.datasource.entities.StockOutBill;
-import com.jsh.erp.datasource.mappers.StockInMapper;
 import com.jsh.erp.datasource.mappers.StockOutBillMapper;
 import com.jsh.erp.datasource.mappers.StockOutMapper;
-import com.jsh.erp.datasource.vo.*;
+import com.jsh.erp.datasource.vo.StockOutBillVo;
+import com.jsh.erp.datasource.vo.StockOutDetailVo;
+import com.jsh.erp.datasource.vo.StockOutVo;
+import com.jsh.erp.exception.BusinessCommonException;
 import com.jsh.erp.exception.BusinessRunTimeException;
 import com.jsh.erp.service.stockOut.StockOutBillService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 
 @Service
 public class StockOutBillServiceImpl extends ServiceImpl<StockOutBillMapper, StockOutBill> implements StockOutBillService {
@@ -77,7 +75,12 @@ public class StockOutBillServiceImpl extends ServiceImpl<StockOutBillMapper, Sto
         StockOutBill stockOutBill = new StockOutBill();
         BeanUtils.copyProperties(stockOutBillVo, stockOutBill);
         stockOutBill.setCreateTime(LocalDateTime.now());
-        return stockOutBillMapper.insert(stockOutBill);
+        try {
+            return stockOutBillMapper.insert(stockOutBill);
+        } catch (Exception e) {
+            throw new BusinessCommonException(ExceptionConstants.ORDER_ID_DUPLICATE_CODE,
+                    ExceptionConstants.ORDER_ID_DUPLICATE_MSG);
+        }
     }
 
     @Override

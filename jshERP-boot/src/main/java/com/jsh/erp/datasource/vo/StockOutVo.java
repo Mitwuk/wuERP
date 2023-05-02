@@ -1,14 +1,14 @@
 package com.jsh.erp.datasource.vo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
-
-import java.time.LocalDateTime;
 
 @Data
 public class StockOutVo {
     private long id;
     private Long billId;
     private String billName;
+    @JsonIgnore
     private String orderId;
     private String productType;
     private String productName;
@@ -20,11 +20,14 @@ public class StockOutVo {
      */
     private String stockInOrderId;
     private String customer;
-    private String supplier;
+    @JsonIgnore
     private int status;
     private String description;
+    @JsonIgnore
     private String modifyTime;
+    @JsonIgnore
     private String modifyName;
+    @JsonIgnore
     private String createName;
     private String createTime;
 }

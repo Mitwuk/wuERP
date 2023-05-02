@@ -209,7 +209,7 @@ public class BusinessConstants {
      *  入库出库状态
      */
     public static final int STOCK_IN_STATUS = 1;
-    public static final int STOCK_OUT_STATUS = 0;
+    public static final int STOCK_OUT_STATUS = 2;
     public static final int STOCK_STATUS = -1;
 
     /**

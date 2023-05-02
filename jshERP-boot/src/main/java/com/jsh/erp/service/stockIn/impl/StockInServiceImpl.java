@@ -4,14 +4,14 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.jsh.erp.constants.BusinessConstants;
+import com.jsh.erp.constants.ExceptionConstants;
 import com.jsh.erp.datasource.entities.StockIn;
 import com.jsh.erp.datasource.entities.StockInBill;
 import com.jsh.erp.datasource.mappers.StockInBillMapper;
 import com.jsh.erp.datasource.mappers.StockInMapper;
-import com.jsh.erp.datasource.vo.StockInBillVo;
-import com.jsh.erp.datasource.vo.StockInDetailVo;
 import com.jsh.erp.datasource.vo.StockInTotal;
 import com.jsh.erp.datasource.vo.StockInVo;
+import com.jsh.erp.exception.BusinessCommonException;
 import com.jsh.erp.service.stockIn.StockInService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,14 +34,23 @@ public class StockInServiceImpl extends ServiceImpl<StockInMapper, StockIn> impl
     @Override
     public boolean upload(List<StockInVo> stockInVoList) {
         List<StockIn> stockInList = new ArrayList<>();
+        StockInBill stockInBill = stockInBillMapper.selectById(stockInVoList.get(0).getBillId());
         for (StockInVo stockInVo : stockInVoList) {
             StockIn stockIn = new StockIn();
             BeanUtils.copyProperties(stockInVo, stockIn);
             stockIn.setStatus(BusinessConstants.STOCK_IN_STATUS);
             stockIn.setCreateTime(LocalDateTime.now());
+            stockIn.setSupplier(stockInBill.getSupplier());
             stockInList.add(stockIn);
         }
-        return this.saveBatch(stockInList);
+        try {
+            return this.saveBatch(stockInList);
+        } catch (Exception e) {
+            String pre = "Duplicate entry '";
+            String orderId = e.getMessage().substring(e.getMessage().indexOf(pre)+pre.length(), e.getMessage().indexOf("' for key"));
+            throw new BusinessCommonException(ExceptionConstants.ORDER_ID_DUPLICATE_CODE,
+                    String.format(ExceptionConstants.ORDER_ID_DUPLICATE_MSG, orderId));
+        }
     }
 
     @Override
@@ -56,7 +65,7 @@ public class StockInServiceImpl extends ServiceImpl<StockInMapper, StockIn> impl
     @Override
     public List<StockInVo> select(StockInVo stockInVo) {
         QueryWrapper<StockIn> queryWrapper = new QueryWrapper<>();
-        if (!Objects.isNull(stockInVo.getStatus()) && stockInVo.getStatus() >= 0) {
+        if (!Objects.isNull(stockInVo.getStatus()) && stockInVo.getStatus() > 0) {
             queryWrapper.eq("status", stockInVo.getStatus());
         }
         if (!Objects.isNull(stockInVo.getBillId())) {

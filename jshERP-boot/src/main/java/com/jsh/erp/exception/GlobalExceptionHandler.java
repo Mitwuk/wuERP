@@ -21,19 +21,26 @@ public class GlobalExceptionHandler {
         // 针对业务参数异常的处理
         if (e instanceof BusinessParamCheckingException) {
             status.put(ExceptionConstants.GLOBAL_RETURNS_CODE, ((BusinessParamCheckingException) e).getCode());
-            status.put(ExceptionConstants.GLOBAL_RETURNS_DATA, ((BusinessParamCheckingException) e).getData());
+            status.put(ExceptionConstants.GLOBAL_RETURNS_MESSAGE, ((BusinessParamCheckingException) e).getData());
             return status;
         }
 
         //针对业务运行时异常的处理
         if (e instanceof BusinessRunTimeException) {
             status.put(ExceptionConstants.GLOBAL_RETURNS_CODE, ((BusinessRunTimeException) e).getCode());
-            status.put(ExceptionConstants.GLOBAL_RETURNS_DATA, ((BusinessRunTimeException) e).getData());
+            status.put(ExceptionConstants.GLOBAL_RETURNS_MESSAGE, ((BusinessRunTimeException) e).getData());
+            return status;
+        }
+
+        //针对业务运行时异常的处理
+        if (e instanceof BusinessCommonException) {
+            status.put(ExceptionConstants.GLOBAL_RETURNS_CODE, ((BusinessCommonException) e).getCode());
+            status.put(ExceptionConstants.GLOBAL_RETURNS_MESSAGE, ((BusinessCommonException) e).getMsg());
             return status;
         }
 
         status.put(ExceptionConstants.GLOBAL_RETURNS_CODE, ExceptionConstants.SERVICE_SYSTEM_ERROR_CODE);
-        status.put(ExceptionConstants.GLOBAL_RETURNS_DATA, ExceptionConstants.SERVICE_SYSTEM_ERROR_MSG);
+        status.put(ExceptionConstants.GLOBAL_RETURNS_MESSAGE, ExceptionConstants.SERVICE_SYSTEM_ERROR_MSG);
         log.error("Global Exception Occured => url : {}, msg : {}", request.getRequestURL(), e.getMessage());
         /**
          * create by: qiankunpingtai

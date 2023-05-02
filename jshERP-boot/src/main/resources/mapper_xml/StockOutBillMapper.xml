@@ -22,9 +22,6 @@
             <result column="product_count" jdbcType="INTEGER" property="productCount" />
             <result column="product_weight" jdbcType="DOUBLE" property="productWeight" />
             <result column="description" jdbcType="VARCHAR" property="description" />
-            <result column="customer" jdbcType="VARCHAR" property="customer" />
-            <result column="supplier" jdbcType="VARCHAR" property="supplier" />
-            <result column="status" jdbcType="INTEGER" property="status" />
             <result column="modify_name" jdbcType="VARCHAR" property="modifyName" />
             <result column="modify_time" jdbcType="TIMESTAMP" property="modifyTime" />
             <result column="create_name" jdbcType="VARCHAR" property="createName" />
@@ -33,11 +30,10 @@
     </resultMap>
 
     <select id="queryStockOutDetail" resultMap="stockOutDetail">
-        select b.id,b.bill_type,b.bill_name,b.customer,b.create_name,b.create_time,o.order_id,o.stock_in_order_id,o.description,
-        i.*, i.id as sid
+        select b.id,b.bill_type,b.bill_name,b.customer,b.create_name,b.create_time,
+               o.*, o.id as sid
         from my_stock_out_bill b
         left join my_stock_out o on b.id=o.bill_id
-        left join my_stock_in i on o.stock_in_order_id = i.order_id
         where 1 = 1
         <if test="startTime != null">
             and b.create_time <![CDATA[ >= ]]> #{startTime}
@@ -46,13 +42,13 @@
             and b.create_time <![CDATA[ <= ]]> #{endTime}
         </if>
         <if test="productName != null">
-            and i.product_name = #{productName}
+            and o.product_name = #{productName}
         </if>
         <if test="customer != null">
             and b.customer = #{customer}
         </if>
         <if test="productType != null">
-            and i.product_type = #{productType}
+            and o.product_type = #{productType}
         </if>
         order by b.create_time desc
     </select>

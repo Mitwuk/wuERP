@@ -12,6 +12,11 @@ public class StockOut {
     private long billId;
     private String orderId;
     private String stockInOrderId;
+    private String productType;
+    private String productName;
+    private String productSize;
+    private int productCount;
+    private double productWeight;
     private String customer;
     private String modifyName;
     private LocalDateTime modifyTime;

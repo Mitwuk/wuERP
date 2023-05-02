@@ -522,6 +522,9 @@ public class ExceptionConstants {
     public static final int BILL_TYPE_OR_BILL_NAME_NOT_EMPTY_CODE = 4001;
     public static final String BILL_TYPE_OR_BILL_NAME_NOT_EMPTY_MSG = "单据类型和名称不能为空";
 
+    public static final int ORDER_ID_DUPLICATE_CODE = 4002;
+    public static final String ORDER_ID_DUPLICATE_MSG = "流水号重复: %s";
+
     public static final Integer HTTP_OK_CODE = 200;
     public static final String HTTP_OK_MESSAGE = "success";
     public static final Integer HTTP_ERROR_CODE = 500;
