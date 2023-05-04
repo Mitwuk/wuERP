@@ -29,6 +29,11 @@
         </collection>
     </resultMap>
 
+    <insert id="insert" parameterType="com.jsh.erp.datasource.entities.StockInBill" useGeneratedKeys="true" keyProperty="id">
+        insert into my_stock_out_bill(bill_type, bill_name, customer, create_name, create_time)
+        values (#{billType}, #{billName}, #{customer}, #{createName}, #{createTime})
+    </insert>
+
     <select id="queryStockOutDetail" resultMap="stockOutDetail">
         select b.id,b.bill_type,b.bill_name,b.customer,b.create_name,b.create_time,
                o.*, o.id as sid
@@ -43,6 +48,9 @@
         </if>
         <if test="productName != null">
             and o.product_name = #{productName}
+        </if>
+        <if test="productName != null">
+            and o.product_size = #{productSize}
         </if>
         <if test="customer != null">
             and b.customer = #{customer}

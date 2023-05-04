@@ -42,11 +42,8 @@ public class StockOutBillController {
 
     @PostMapping(value = "/add")
     @ApiOperation(value = "创建出库单")
-    public ResponseBean<Object> add(@RequestBody StockOutBillVo stockOutBillVo) {
-        if (BooleanUtils.toBoolean(stockOutBillService.add(stockOutBillVo))) {
-            return ResponseBean.ok();
-        }
-        return new ResponseBean<Object>(USER_ADD_FAILED_CODE, "创建失败");
+    public ResponseBean<Integer> add(@RequestBody StockOutBillVo stockOutBillVo) {
+        return ResponseBean.ok(stockOutBillService.add(stockOutBillVo));
     }
 
     @DeleteMapping(value = "/delete")

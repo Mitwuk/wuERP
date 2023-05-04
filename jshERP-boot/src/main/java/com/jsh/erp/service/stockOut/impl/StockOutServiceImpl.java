@@ -72,6 +72,9 @@ public class StockOutServiceImpl extends ServiceImpl<StockOutMapper, StockOut> i
         if (!Objects.isNull(stockOutVo.getProductName())) {
             queryWrapper.eq("product_name", stockOutVo.getProductName());
         }
+        if (!Objects.isNull(stockOutVo.getProductSize())) {
+            queryWrapper.eq("product_size", stockOutVo.getProductSize());
+        }
         if (!Objects.isNull(stockOutVo.getCreateTime())) {
             String startString = stockOutVo.getCreateTime() + BusinessConstants.START_TIME_SUFFIX;
             String endString = stockOutVo.getCreateTime() + BusinessConstants.END_TIME_SUFFIX;

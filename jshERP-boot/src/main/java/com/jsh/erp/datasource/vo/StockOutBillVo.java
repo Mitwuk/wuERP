@@ -20,6 +20,8 @@ public class StockOutBillVo extends QueryRequest implements Serializable {
     @JsonIgnore
     private String productName;
     @JsonIgnore
+    private String productSize;
+    @JsonIgnore
     private String productType;
     @JsonIgnore
     private String startTime;

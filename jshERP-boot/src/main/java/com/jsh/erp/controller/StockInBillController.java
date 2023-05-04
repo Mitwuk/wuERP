@@ -42,11 +42,8 @@ public class StockInBillController {
 
     @PostMapping(value = "/add")
     @ApiOperation(value = "创建入库单")
-    public ResponseBean<Object> add(@RequestBody StockInBillVo stockInBillVo) {
-        if (BooleanUtils.toBoolean(stockInBillService.add(stockInBillVo))) {
-            return ResponseBean.ok();
-        }
-        return new ResponseBean<Object>(USER_ADD_FAILED_CODE, "创建失败");
+    public ResponseBean<Long> add(@RequestBody StockInBillVo stockInBillVo) {
+        return ResponseBean.ok(stockInBillService.add(stockInBillVo));
     }
 
     @DeleteMapping(value = "/delete")

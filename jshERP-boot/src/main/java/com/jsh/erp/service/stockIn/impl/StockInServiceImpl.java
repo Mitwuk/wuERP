@@ -80,6 +80,9 @@ public class StockInServiceImpl extends ServiceImpl<StockInMapper, StockIn> impl
         if (!Objects.isNull(stockInVo.getProductName())) {
             queryWrapper.eq("product_name", stockInVo.getProductName());
         }
+        if (!Objects.isNull(stockInVo.getProductSize())) {
+            queryWrapper.eq("product_size", stockInVo.getProductSize());
+        }
         if (!Objects.isNull(stockInVo.getCreateTime())) {
             String startString = stockInVo.getCreateTime() + BusinessConstants.START_TIME_SUFFIX;
             String endString = stockInVo.getCreateTime() + BusinessConstants.END_TIME_SUFFIX;

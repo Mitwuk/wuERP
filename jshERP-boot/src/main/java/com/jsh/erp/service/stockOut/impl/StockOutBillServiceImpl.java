@@ -75,12 +75,8 @@ public class StockOutBillServiceImpl extends ServiceImpl<StockOutBillMapper, Sto
         StockOutBill stockOutBill = new StockOutBill();
         BeanUtils.copyProperties(stockOutBillVo, stockOutBill);
         stockOutBill.setCreateTime(LocalDateTime.now());
-        try {
-            return stockOutBillMapper.insert(stockOutBill);
-        } catch (Exception e) {
-            throw new BusinessCommonException(ExceptionConstants.ORDER_ID_DUPLICATE_CODE,
-                    ExceptionConstants.ORDER_ID_DUPLICATE_MSG);
-        }
+        stockOutBillMapper.insert(stockOutBill);
+        return stockOutBill.getId();
     }
 
     @Override

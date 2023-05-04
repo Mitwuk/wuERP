@@ -27,6 +27,11 @@
         </collection>
     </resultMap>
 
+    <insert id="insert" parameterType="com.jsh.erp.datasource.entities.StockInBill" useGeneratedKeys="true" keyProperty="id">
+        insert into my_stock_in_bill(bill_type, bill_name, supplier, create_name, create_time)
+        values (#{billType}, #{billName}, #{supplier}, #{createName}, #{createTime})
+    </insert>
+
     <select id="queryStockInDetail" resultMap="stockInDetail">
         select b.*, i.*, i.id as sid from my_stock_in_bill b
             left join my_stock_in i on b.id = i.bill_id

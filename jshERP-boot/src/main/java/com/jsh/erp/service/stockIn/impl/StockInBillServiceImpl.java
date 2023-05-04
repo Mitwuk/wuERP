@@ -75,10 +75,13 @@ public class StockInBillServiceImpl extends ServiceImpl<StockInBillMapper, Stock
             if (!Objects.isNull(stockInBillVo.getProductName())) {
                 queryStockIn.eq("product_name", stockInBillVo.getProductName());
             }
+            if (!Objects.isNull(stockInBillVo.getProductSize())) {
+                queryStockIn.eq("product_size", stockInBillVo.getProductSize());
+            }
             queryStockIn.eq("bill_id", stockInDetailVo.getId());
             // 查询入库但详情
             List<StockIn> stockInList = stockInMapper.selectList(queryStockIn);
-            if (CollectionUtils.isEmpty(stockInList) && (!Objects.isNull(stockInBillVo.getSupplier()) || !Objects.isNull(stockInBillVo.getProductName()))) {
+            if (CollectionUtils.isEmpty(stockInList) && (!Objects.isNull(stockInBillVo.getSupplier()) || !Objects.isNull(stockInBillVo.getProductName()) || !Objects.isNull(stockInBillVo.getProductSize()))) {
                 stockInDetail.remove(i);
                 i--;
                 continue;
@@ -94,7 +97,7 @@ public class StockInBillServiceImpl extends ServiceImpl<StockInBillMapper, Stock
 
 
     @Override
-    public int add(StockInBillVo stockInBillVo) {
+    public long add(StockInBillVo stockInBillVo) {
         if (StringUtils.isEmpty(stockInBillVo.getBillType()) || StringUtils.isEmpty(stockInBillVo.getBillName())) {
             throw new BusinessRunTimeException(ExceptionConstants.BILL_TYPE_OR_BILL_NAME_NOT_EMPTY_CODE,
                     ExceptionConstants.BILL_TYPE_OR_BILL_NAME_NOT_EMPTY_MSG);
@@ -102,7 +105,8 @@ public class StockInBillServiceImpl extends ServiceImpl<StockInBillMapper, Stock
         StockInBill stockInBill = new StockInBill();
         BeanUtils.copyProperties(stockInBillVo, stockInBill);
         stockInBill.setCreateTime(LocalDateTime.now());
-        return stockInBillMapper.insert(stockInBill);
+        stockInBillMapper.insert(stockInBill);
+        return stockInBill.getId();
     }
 
     @Override

@@ -13,7 +13,7 @@ public interface StockInBillService {
 
     List<StockInDetailVo> queryStockInDetail(StockInBillVo stockInBillVo);
 
-    int add(StockInBillVo stockInBillVo);
+    long add(StockInBillVo stockInBillVo);
 
     boolean delete(long id);
 }
