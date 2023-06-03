@@ -13,9 +13,9 @@ import com.jsh.erp.datasource.mappers.StockOutMapper;
 import com.jsh.erp.datasource.vo.StockOutBillVo;
 import com.jsh.erp.datasource.vo.StockOutDetailVo;
 import com.jsh.erp.datasource.vo.StockOutVo;
-import com.jsh.erp.exception.BusinessCommonException;
 import com.jsh.erp.exception.BusinessRunTimeException;
 import com.jsh.erp.service.stockOut.StockOutBillService;
+import com.jsh.erp.utils.ParamUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,9 +23,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
 
 @Service
 public class StockOutBillServiceImpl extends ServiceImpl<StockOutBillMapper, StockOutBill> implements StockOutBillService {
@@ -51,19 +50,30 @@ public class StockOutBillServiceImpl extends ServiceImpl<StockOutBillMapper, Sto
             stockOutBillVo.setStartTime(startString);
             stockOutBillVo.setEndTime(endString);
         }
-        List<StockOutDetailVo> stockOutDetailVos = stockOutBillMapper.queryStockOutDetail(stockOutBillVo);
-        for (StockOutDetailVo stockOutDetailVo : stockOutDetailVos) {
+        String offset = ParamUtils.getPageOffset(stockOutBillVo.getPageNum(), stockOutBillVo.getPageSize());
+        stockOutBillVo.setOffset(Integer.parseInt(offset));
+        List<StockOutBill> stockOutBillList = stockOutBillMapper.queryStockOutBill(stockOutBillVo);
+        List<StockOutDetailVo> stockOutDetailVoList = new ArrayList<>();
+        stockOutBillList.forEach(stockOutBill -> {
+            StockOutDetailVo stockOutDetailVo = new StockOutDetailVo();
+            BeanUtils.copyProperties(stockOutBill, stockOutDetailVo);
+            stockOutDetailVo.setCreateTime(stockOutBill.getCreateTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
             List<StockOutVo> sos = new ArrayList<>();
-            for (StockOutVo stockOutVo : stockOutDetailVo.getStockOutList()) {
-                if (StringUtils.isEmpty(stockOutVo.getStockInOrderId())) {
-                    continue;
-                }
+            List<StockOut> stockOuts = stockOutMapper.selectList(new QueryWrapper<StockOut>().lambda()
+                    .eq(StockOut::getBillId, stockOutBill.getId()));
+            stockOuts.forEach(stockOut -> {
+                stockOut.setCustomer(stockOutBill.getCustomer());
+                StockOutVo stockOutVo = new StockOutVo();
+                BeanUtils.copyProperties(stockOut, stockOutVo);
+                stockOutVo.setBillName(stockOutBill.getBillName());
+                stockOutVo.setCreateTime(stockOut.getCreateTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
                 sos.add(stockOutVo);
-            }
+            });
             Collections.reverse(sos);
             stockOutDetailVo.setStockOutList(sos);
-        }
-        return stockOutDetailVos;
+            stockOutDetailVoList.add(stockOutDetailVo);
+        });
+        return stockOutDetailVoList;
     }
 
     @Override

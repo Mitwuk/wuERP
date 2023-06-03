@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>出库单列表</title>
+    <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/bootstrap/4.6.0/css/bootstrap.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            font-size: 16px;
+            line-height: 1.4;
+            background-color: #f7f7f7;
+        }
+
+        .container {
+            max-width: 960px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            font-size: 32px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin-bottom: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        }
+
+        th, td {
+            text-align: left;
+            padding: 12px;
+            border: 1px solid #ddd;
+        }
+
+        th {
+            font-weight: bold;
+            background-color: #f2f2f2;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        tr:hover {
+            background-color: #ddd;
+        }
+
+        button {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0069d9;
+        }
+
+        .modal-dialog {
+            max-width: 960px;
+            margin: 1.75rem auto;
+        }
+
+        .modal-content {
+            background-color: #fff;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .modal-header {
+            background-color: #f2f2f2;
+        }
+
+        .modal-title {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .modal-body {
+            padding: 20px;
+        }
+
+        .table-details {
+            margin-bottom: 0;
+        }
+        .modal-body {
+            max-height: 400px;  /* 设置最大高度为400px */
+            overflow-y: auto;   /* 当内容超出最大高度时，自动出现垂直滚动条 */
+        }
+    </style>
+    <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/bootstrap/4.6.0/js/bootstrap.min.js"></script>
+    <script>
+        function showDetails(str) {
+            $('.modal').modal('hide');
+            var modal = $('<div class="modal fade" tabindex="-1" role="dialog">' +
+                '<div class="modal-dialog modal-dialog-centered" role="document">' +
+                '<div class="modal-content">' +
+                '<div class="modal-header">' +
+                '<h5 class="modal-title">出库单详情</h5>' +
+                '<button type="button" class="close" data-dismiss="modal" aria-label="Close">' +
+                '<span aria-hidden="true">&times;</span>' +
+                '</button>' +
+                '</div>' +
+                '<div class="modal-body" style="max-height: 400px;overflow-y: auto;">' +  // 添加CSS样式
+                '<table class="table table-details">' +
+                '<thead>' +
+                '<tr>' +
+                '<th>id</th>' +
+                '<th>账单id</th>' +
+                '<th>账单名称</th>' +
+                '<th>产品类型</th>' +
+                '<th>产品名称</th>' +
+                '<th>产品规格</th>' +
+                '<th>产品数量</th>' +
+                '<th>产品重量</th>' +
+                '<th>入库订单id</th>' +
+                '<th>客户名称</th>' +
+                '<th>状态</th>' +
+                '<th>备注</th>' +
+                '<th>创建人</th>' +
+                '<th>创建时间</th>' +
+                '</tr>' +
+                '</thead>' +
+                '<tbody>');
+            // 定义正则表达式，用于匹配每个对象的key和value
+            const reg = /(\w+)=([^,\)]+)/g;
+
+            // 将字符串中的每个对象的属性转换为一个JavaScript对象，并添加到数组中
+            const stockOutList = [];
+            let match;
+            let obj = {};
+            while (match = reg.exec(str)) {
+                obj[match[1]] = isNaN(match[2]) ? match[2] : parseFloat(match[2]);
+                if (reg.lastIndex >= str.length || str[reg.lastIndex] === ')') {
+                    stockOutList.push(obj);
+                    obj = {};
+                }
+            }
+
+            // 在模态框中循环输出每个对象的属性值
+            const tbody = modal.find('tbody');
+            for (let i = 0; i < stockOutList.length; i++) {
+                const out = stockOutList[i];
+                tbody.append('<tr>' +
+                    '<td>' + out.id + '</td>' +
+                    '<td>' + out.billId + '</td>' +
+                    '<td>' + out.billName + '</td>' +
+                    '<td>' + out.productType + '</td>' +
+                    '<td>' + out.productName + '</td>' +
+                    '<td>' + out.productSize + '</td>' +
+                    '<td>' + out.productCount + '</td>' +
+                    '<td>' + out.productWeight + '</td>' +
+                    '<td>' + out.stockInOrderId + '</td>' +
+                    '<td>' + out.customer + '</td>' +
+                    '<td>' + out.status + '</td>' +
+                    '<td>' + (out.description !== undefined ? out.description : '') + '</td>' +
+                    '<td>' + out.createName + '</td>' +
+                    '<td>' + out.createTime + '</td>' +
+                    '</tr>');
+            }
+            modal.append('</tbody></table></div>' +
+                '<div class="modal-footer">' +
+                '<button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>' +
+                '</div>' +
+                '</div>' +
+                '</div>' +
+                '</div>');
+
+            modal.modal('show');
+        }
+    </script>
+</head>
+<body>
+<div class="container">
+    <h1>出库单列表</h1>
+    <table>
+        <thead>
+        <tr>
+            <th>id</th>
+            <th>账单名称</th>
+            <th>账单类型</th>
+            <th>客户名称</th>
+            <th>创建时间</th>
+            <th>操作</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="out : ${data}">
+            <td th:text="${out.id}"></td>
+            <td th:text="${out.billName}"></td>
+            <td th:text="${out.billType}"></td>
+            <td th:text="${out.customer}"></td>
+            <td th:text="${out.createTime}"></td>
+            <td>
+                <button class="btn btn-primary" th:onclick="'showDetails(\'' + ${out.stockOutList} + '\')'">查看详情</button>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

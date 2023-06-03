@@ -29,16 +29,23 @@
         </collection>
     </resultMap>
 
+    <resultMap id="stockOutBill" type="com.jsh.erp.datasource.entities.StockOutBill">
+        <id column="id" jdbcType="BIGINT" property="id" />
+        <result column="bill_type" jdbcType="VARCHAR" property="billType" />
+        <result column="bill_name" jdbcType="VARCHAR" property="billName" />
+        <result column="customer" jdbcType="VARCHAR" property="customer" />
+        <result column="create_name" jdbcType="VARCHAR" property="createName" />
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    </resultMap>
+
     <insert id="insert" parameterType="com.jsh.erp.datasource.entities.StockInBill" useGeneratedKeys="true" keyProperty="id">
         insert into my_stock_out_bill(bill_type, bill_name, customer, create_name, create_time)
         values (#{billType}, #{billName}, #{customer}, #{createName}, #{createTime})
     </insert>
 
-    <select id="queryStockOutDetail" resultMap="stockOutDetail">
-        select b.id,b.bill_type,b.bill_name,b.customer,b.create_name,b.create_time,
-               o.*, o.id as sid
+    <select id="queryStockOutBill" resultMap="stockOutBill">
+        select b.id,b.bill_type,b.bill_name,b.customer,b.create_name,b.create_time
         from my_stock_out_bill b
-        left join my_stock_out o on b.id=o.bill_id
         where 1 = 1
         <if test="startTime != null">
             and b.create_time <![CDATA[ >= ]]> #{startTime}
@@ -46,18 +53,12 @@
         <if test="endTime != null">
             and b.create_time <![CDATA[ <= ]]> #{endTime}
         </if>
-        <if test="productName != null">
-            and o.product_name = #{productName}
-        </if>
-        <if test="productName != null">
-            and o.product_size = #{productSize}
-        </if>
         <if test="customer != null">
             and b.customer = #{customer}
         </if>
-        <if test="productType != null">
-            and o.product_type = #{productType}
-        </if>
         order by b.create_time desc
+        <if test="offset != null and pageSize != null">
+            limit #{offset},#{pageSize}
+        </if>
     </select>
 </mapper>

@@ -21,6 +21,7 @@ public class QueryRequest implements Serializable {
      * 当前页码
      */
     private int pageNum = 1;
+    private int offset;
     /**
      * 排序字段
      */

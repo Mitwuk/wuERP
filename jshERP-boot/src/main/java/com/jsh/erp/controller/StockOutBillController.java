@@ -1,7 +1,6 @@
 package com.jsh.erp.controller;
 
 import com.jsh.erp.datasource.common.ResponseBean;
-import com.jsh.erp.datasource.vo.StockInDetailVo;
 import com.jsh.erp.datasource.vo.StockOutBillVo;
 import com.jsh.erp.datasource.vo.StockOutDetailVo;
 import com.jsh.erp.service.stockOut.StockOutBillService;
@@ -9,9 +8,10 @@ import com.jsh.erp.utils.QueryUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.BooleanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
 import java.util.Map;
@@ -38,6 +38,16 @@ public class StockOutBillController {
     @ApiOperation(value = "分页查询出库单列表（详情）")
     public ResponseBean<List<StockOutDetailVo>> selectDetail(StockOutBillVo stockOutBillVo) {
         return ResponseBean.ok(stockOutBillService.queryStockOutDetail(stockOutBillVo));
+    }
+
+    @GetMapping("/index")
+    @ApiOperation(value = "分页查询出库单列表（详情）")
+    public ModelAndView selectDetailWeb1(StockOutBillVo stockOutBillVo) {
+        ModelAndView mv = new ModelAndView();
+        List<StockOutDetailVo> stockOutDetailVos = stockOutBillService.queryStockOutDetail(stockOutBillVo);
+        mv.addObject("data", stockOutDetailVos);
+        mv.setViewName("/index.html");
+        return mv;
     }
 
     @PostMapping(value = "/add")
