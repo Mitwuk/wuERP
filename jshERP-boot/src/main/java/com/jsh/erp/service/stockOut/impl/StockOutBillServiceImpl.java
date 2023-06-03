@@ -57,6 +57,7 @@ public class StockOutBillServiceImpl extends ServiceImpl<StockOutBillMapper, Sto
         stockOutBillList.forEach(stockOutBill -> {
             StockOutDetailVo stockOutDetailVo = new StockOutDetailVo();
             BeanUtils.copyProperties(stockOutBill, stockOutDetailVo);
+            stockOutDetailVo.setId(stockOutBill.getId());
             stockOutDetailVo.setCreateTime(stockOutBill.getCreateTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
             List<StockOutVo> sos = new ArrayList<>();
             List<StockOut> stockOuts = stockOutMapper.selectList(new QueryWrapper<StockOut>().lambda()
