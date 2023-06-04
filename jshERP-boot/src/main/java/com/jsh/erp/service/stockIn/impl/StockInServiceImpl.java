@@ -13,6 +13,7 @@ import com.jsh.erp.datasource.vo.StockInTotal;
 import com.jsh.erp.datasource.vo.StockInVo;
 import com.jsh.erp.exception.BusinessCommonException;
 import com.jsh.erp.service.stockIn.StockInService;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -59,6 +60,11 @@ public class StockInServiceImpl extends ServiceImpl<StockInMapper, StockIn> impl
         List<StockInTotal> statistics = statistics(stockInVoList);
         statistics.sort((a, b) -> Math.toIntExact(a.getMaxHour() - b.getMaxHour()));
         Collections.reverse(statistics);
+        if (StringUtils.isEmpty(stockInVo.getProductType())) {
+            for (StockInTotal total : statistics) {
+                total.setStockIns(new ArrayList<>());
+            }
+        }
         return statistics;
     }
 
@@ -91,19 +97,19 @@ public class StockInServiceImpl extends ServiceImpl<StockInMapper, StockIn> impl
         queryWrapper.orderByDesc(BusinessConstants.CREATE_TIME_FIELD);
         List<StockIn> stockInList = stockInMapper.selectList(queryWrapper);
         List<StockInVo> stockInVoList = new ArrayList<>();
-        Map<Long, String> billNameMap = new HashMap<>();
+//        Map<Long, String> billNameMap = new HashMap<>();
         for (StockIn stockIn : stockInList) {
             StockInVo stock = new StockInVo();
             BeanUtils.copyProperties(stockIn, stock);
-            if (!billNameMap.containsKey(stockIn.getBillId())) {
-                StockInBill stockInBill = stockInBillMapper.selectById(stockIn.getBillId());
-                billNameMap.put(stockIn.getBillId(), stockInBill.getBillName());
-            }
+//            if (!billNameMap.containsKey(stockIn.getBillId())) {
+//                StockInBill stockInBill = stockInBillMapper.selectById(stockIn.getBillId());
+//                billNameMap.put(stockIn.getBillId(), stockInBill.getBillName());
+//            }
             if (BusinessConstants.STOCK_IN_STATUS == stockIn.getStatus()) {
                 Duration between = Duration.between(stockIn.getCreateTime(), LocalDateTime.now());
                 stock.setStockHour(between.toHours());
             }
-            stock.setBillName(billNameMap.get(stockIn.getBillId()));
+//            stock.setBillName(billNameMap.get(stockIn.getBillId()));
             DateTimeFormatter fmt = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
             stock.setCreateTime(stockIn.getCreateTime().format(fmt));
             stockInVoList.add(stock);

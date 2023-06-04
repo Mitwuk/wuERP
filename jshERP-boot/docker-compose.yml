@@ -35,6 +35,7 @@ services:
     image: erp
     container_name: erp
     environment:
+      TZ : Asia/Shanghai
       SPRING_DATASOURCE_HOST: mysql
       SPRING_DATASOURCE_PORT: 3306
       SPRING_DATASOURCE_USERNAME: root
